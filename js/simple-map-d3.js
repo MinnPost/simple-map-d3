@@ -1,12 +1,16 @@
 /**
  * Main JS for Simple Map (D3).
+ *
+ * Colors from http://colorbrewer2.org/
  */
 var SimpleMapD3 = (function() {
   // Private variables and functions
   var defaults = {
     stroke: '#898989',
     fill: '#FFFFFF',
-    colorOn: false
+    colorOn: false,
+    colorSet: ['#F7FCF5', '#E5F5E0', '#C7E9C0', '#A1D99B', 
+      '#74C476', '#41AB5D', '#238B45', '#005A32']
   };
   
   // Constructor
@@ -111,7 +115,7 @@ var SimpleMapD3 = (function() {
     var min = d3.min(this.data.features, function(d) { return d.properties[thisMap.options.colorProperty]; });
     var max = d3.max(this.data.features, function(d) { return d.properties[thisMap.options.colorProperty]; });
     // Use a sort of sensible, proportional color step
-    this.options.colorStep = this.options.colorStep || ((max - min) / this.options.colorSet.length * 0.1);
+    this.options.colorStep = this.options.colorStep || ((max - min) / this.options.colorSet.length / 2);
 
     this.colorRange = d3.scale.linear()
       .domain(d3.range(min, max, this.options.colorStep))
