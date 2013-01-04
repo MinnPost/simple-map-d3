@@ -11,7 +11,7 @@
 
   <!-- Include container for map -->
   <h1>Simple Map (D3) Example 1</h1>
-  <div class="simple-map-d3-example" style="width: 600px; margin: 0 auto;">
+  <div class="simple-map-d3-example" style="width: 50%; height: 400px; border: 1px solid #898989; margin: 0 auto;">
   </div>
 
   <!-- Include scripts -->
@@ -21,6 +21,7 @@
   <!-- Make map -->
   <script type="text/javascript">
     var map = new SimpleMapD3({
+      container: '.simple-map-d3-example',
       datasource: 'data/mn-county-2010.json'
     });
   </script>
