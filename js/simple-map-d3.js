@@ -41,6 +41,7 @@ var SimpleMapD3 = (function() {
     }
     this.createCanvas();
     this.project();
+    this.render();
   };
   
   // Load up canvas, set size to container
@@ -83,7 +84,7 @@ var SimpleMapD3 = (function() {
       this.canvas.attr('transform', 'translate(0, ' + d / 5 + ')');
     }
     
-    // Handle offset, dpeneding on orientation
+    // Handle offset, depending on orientation
     widthd = this.proj(bounds0[0])[1];
     heightd = this.proj(bounds0[1])[0];
     if (xscale > yscale) {
@@ -94,6 +95,17 @@ var SimpleMapD3 = (function() {
       this.projection.offsetxd = margin;
       this.projection.offsetyd = (this.height / 2 - heightd / 2);
     }
+  };
+  
+  // Render
+  SimpleMapD3.prototype.render = function() {
+    this.canvas
+      .selectAll('path')
+        .data(this.data.features)
+      .enter().append('path')
+        .attr('d', this.projection.path)
+        .attr('stroke', '#EDEDED')
+        .attr('transform', 'translate(' + this.projection.offsetxd + ', ' + this.projection.offsetyd + ')');
   };
   
   // return module
