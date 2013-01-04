@@ -3,14 +3,16 @@
  */
 var SimpleMapD3 = (function() {
   // Private variables and functions
-  var foo = 'bar';
+  var defaults = {
+  
+  };
   
   // Constructor
   var SimpleMapD3 = function(options) {
     this.options = options;
     
     // Check if data was given, or if data source was given
-    if (this.options.data === Object(obj)) {
+    if (this.options.data === Object(this.options.data)) {
       this.data = this.options.data;
       this.dataLoaded(this.data);
     }
@@ -24,14 +26,21 @@ var SimpleMapD3 = (function() {
   
   // Get data
   SimpleMapD3.prototype.getData = function() {
-    d3.json(this.options.datasource, this.dataLoaded);
+    var thisMap = this;
+    
+    d3.json(this.options.datasource, function(data) {
+      thisMap.data = data;
+      thisMap.loadData();
+    });
   };
   
   // Handle data once loaded
-  SimpleMapD3.prototype.dataLoaded = function(data) {
+  SimpleMapD3.prototype.loadData = function(data) {
     if (this.data === void 0) {
       this.data = data;
     }
+    
+    console.log(this);
   };
   
   // return module
