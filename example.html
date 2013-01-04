@@ -1,0 +1,29 @@
+<!doctype html>
+<html class="no-js" lang="en" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:og="http://opengraphprotocol.org/schema/">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Simple Map (D3)</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+</head>
+<body>
+
+  <!-- Include container for map -->
+  <h1>Simple Map (D3) Example 1</h1>
+  <div class="simple-map-d3-example" style="width: 600px; margin: 0 auto;">
+  </div>
+
+  <!-- Include scripts -->
+  <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+  <script type="text/javascript" src="js/simple-map-d3.js"></script>
+  
+  <!-- Make map -->
+  <script type="text/javascript">
+    var map = new SimpleMapD3({
+      data: 'path/to/file.geojson'
+    });
+  </script>
+
+</body>
+</html>
