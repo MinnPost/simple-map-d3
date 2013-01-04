@@ -6,6 +6,7 @@ var SimpleMapD3 = (function() {
   var defaults = {
     stroke: '#898989',
     fill: '#FFFFFF',
+    colorOn: false
   };
   
   // Constructor
@@ -103,15 +104,45 @@ var SimpleMapD3 = (function() {
     }
   };
   
+  // Make color range
+  SimpleMapD3.prototype.makeColorRange = function() {
+    var thisMap = this;
+    
+    var min = d3.min(this.data.features, function(d) { return d.properties[thisMap.options.colorProperty]; });
+    var max = d3.max(this.data.features, function(d) { return d.properties[thisMap.options.colorProperty]; });
+    // Use a sort of sensible, proportional color step
+    this.options.colorStep = this.options.colorStep || ((max - min) / this.options.colorSet.length * 0.1);
+
+    this.colorRange = d3.scale.linear()
+      .domain(d3.range(min, max, this.options.colorStep))
+      .range(this.options.colorSet)
+      .clamp(true);
+  };
+  
+  // Callback for attribute: Fill
+  SimpleMapD3.prototype.attributeFill = function(d) {
+    if (this.options.colorOn === false) {
+      return this.options.fill;
+    }
+    else {
+      if (!this.ColorRange) {
+        this.makeColorRange();
+      }
+      return this.colorRange(d.properties[this.options.colorProperty]);
+    }
+  };
+  
   // Render
   SimpleMapD3.prototype.render = function() {
+    var thisMap = this;
+  
     this.canvas
       .selectAll('path')
         .data(this.data.features)
       .enter().append('path')
         .attr('d', this.projOptions.path)
         .attr('stroke', this.options.stroke)
-        .attr('fill', this.options.fill)
+        .attr('fill', function(d) { return thisMap.attributeFill(d); })
         .attr('transform', 'translate(' + this.projOptions.offsetxd + ', ' + this.projOptions.offsetyd + ')');
   };
   
