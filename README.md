@@ -24,6 +24,19 @@ Create the map
       datasource: 'data/mn-county-2010.json'
     });
 
+### Colors
+
+Define colors and the property to use from the GeoJSON features and watch the magic happen:
+
+    var map = new SimpleMapD3({
+      container: '.simple-map-d3-example',
+      datasource: 'data/mn-county-2010.json',
+      colorOn: true,
+      colorProperty: 'POPULATION',
+      colorSet: ['#F7FCF5', '#E5F5E0', '#C7E9C0', '#A1D99B', 
+        '#74C476', '#41AB5D', '#238B45', '#005A32']
+    });
+
 ## Options
 
 The following are options that can be passed to the SimpleMapD3 object
