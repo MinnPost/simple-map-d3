@@ -1,6 +1,6 @@
 # Simple Map (D3)
 
-A very simple "choropleth" style map with D3 (R2D3).  All you need is a GeoJSON of polygons.
+A very simple "choropleth" style map with tooltips with D3 (R2D3).  All you need is a GeoJSON of polygons.
 
 ## Data
 
