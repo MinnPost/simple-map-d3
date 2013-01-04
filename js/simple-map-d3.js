@@ -4,12 +4,18 @@
 var SimpleMapD3 = (function() {
   // Private variables and functions
   var defaults = {
-  
+    stroke: '#898989',
+    fill: '#FFFFFF',
   };
   
   // Constructor
   var SimpleMapD3 = function(options) {
-    this.options = options;
+    // Extend defaults
+    var extended = defaults;
+    for (var prop in options) {
+      extended[prop] = options[prop];
+    }
+    this.options = extended;
     
     // Check if data was given, or if data source was given
     if (this.options.data === Object(this.options.data)) {
@@ -57,7 +63,7 @@ var SimpleMapD3 = (function() {
   // Project data into the canvas
   SimpleMapD3.prototype.project = function() {
     this.proj = d3.geo.mercator().scale(1).translate([0,0]);
-    this.projection = this.projection || {};
+    this.projOptions = this.projOptions || {};
     
     // Variables
     var margin = this.width * 0.02;
@@ -72,7 +78,7 @@ var SimpleMapD3 = (function() {
     // Handle projection
     this.proj.scale(pscale);
     this.proj.translate(this.proj([-bounds0[0][0], -bounds0[1][1]]));
-    this.projection.path = d3.geo.path().projection(this.proj);
+    this.projOptions.path = d3.geo.path().projection(this.proj);
     
     // Handle svg canvas, dpeneding on orientation
     if (xscale > yscale) {
@@ -88,12 +94,12 @@ var SimpleMapD3 = (function() {
     widthd = this.proj(bounds0[0])[1];
     heightd = this.proj(bounds0[1])[0];
     if (xscale > yscale) {
-      this.projection.offsetxd = (this.width / 2 - widthd / 2);
-      this.projection.offsetyd = margin;
+      this.projOptions.offsetxd = (this.width / 2 - widthd / 2);
+      this.projOptions.offsetyd = margin;
     }
     else {
-      this.projection.offsetxd = margin;
-      this.projection.offsetyd = (this.height / 2 - heightd / 2);
+      this.projOptions.offsetxd = margin;
+      this.projOptions.offsetyd = (this.height / 2 - heightd / 2);
     }
   };
   
@@ -103,9 +109,10 @@ var SimpleMapD3 = (function() {
       .selectAll('path')
         .data(this.data.features)
       .enter().append('path')
-        .attr('d', this.projection.path)
-        .attr('stroke', '#EDEDED')
-        .attr('transform', 'translate(' + this.projection.offsetxd + ', ' + this.projection.offsetyd + ')');
+        .attr('d', this.projOptions.path)
+        .attr('stroke', this.options.stroke)
+        .attr('fill', this.options.fill)
+        .attr('transform', 'translate(' + this.projOptions.offsetxd + ', ' + this.projOptions.offsetyd + ')');
   };
   
   // return module
