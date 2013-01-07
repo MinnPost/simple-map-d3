@@ -7,6 +7,7 @@ function SimpleMapD3(o) {
   var smd = {};
   
   var defaults = {
+    'stroke-width': 1,
     stroke: '#898989',
     fill: '#FFFFFF',
     colorOn: false,
@@ -152,6 +153,7 @@ function SimpleMapD3(o) {
       .enter().append('path')
         .attr('d', smd.projOptions.path)
         .attr('stroke', smd.options.stroke)
+        .attr('stroke-width', smd.options['stroke-width'])
         .attr('fill', function(d) { return smd.attributeFill(d); })
         .attr('transform', 'translate(' + smd.projOptions.offsetxd + ', ' + smd.projOptions.offsetyd + ')')
         .on('mouseover', function(d) {

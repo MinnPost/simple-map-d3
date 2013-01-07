@@ -17,7 +17,7 @@
   <div class="simple-map-d3-example" style="width: 50%; height: 400px; border: 1px solid #898989; margin: 0 auto;">
   </div>
   
-  <h1>Household Size of DC by Census Tract</h1>
+  <h1>Housing Units of DC by Census Block</h1>
   <div class="simple-map-d3-example-2" style="width: 40%; height: 300px; border: 1px solid #898989; margin: 0 auto;">
   </div>
 
@@ -38,7 +38,9 @@
       container: '.simple-map-d3-example-2',
       datasource: 'data/dc-housing-units-census-tract.json',
       colorOn: true,
-      colorProperty: 'HOUSING10'
+      colorProperty: 'HOUSING10',
+      colorSet: ['#FFFFE5', '#FFF7BC', '#FEE391', '#FEC44F', '#FE9929', '#EC7014', '#CC4C02', '#8C2D04'],
+      'stroke-width': 0
     });
   </script>
 
