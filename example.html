@@ -16,6 +16,10 @@
   <h1>Population of Minnesota by County</h1>
   <div class="simple-map-d3-example" style="width: 50%; height: 400px; border: 1px solid #898989; margin: 0 auto;">
   </div>
+  
+  <h1>Household Size of DC by Census Tract</h1>
+  <div class="simple-map-d3-example-2" style="width: 40%; height: 300px; border: 1px solid #898989; margin: 0 auto;">
+  </div>
 
   <!-- Include scripts -->
   <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
@@ -23,11 +27,18 @@
   
   <!-- Make map -->
   <script type="text/javascript">
-    var map = new SimpleMapD3({
+    var map1 = SimpleMapD3({
       container: '.simple-map-d3-example',
       datasource: 'data/mn-county-2010.json',
       colorOn: true,
       colorProperty: 'POPULATION'
+    });
+    
+    var map2 = SimpleMapD3({
+      container: '.simple-map-d3-example-2',
+      datasource: 'data/dc-housing-units-census-tract.json',
+      colorOn: true,
+      colorProperty: 'HOUSING10'
     });
   </script>
 
