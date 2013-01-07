@@ -10,7 +10,15 @@ var SimpleMapD3 = (function() {
     fill: '#FFFFFF',
     colorOn: false,
     colorSet: ['#F7FCF5', '#E5F5E0', '#C7E9C0', '#A1D99B', 
-      '#74C476', '#41AB5D', '#238B45', '#005A32']
+      '#74C476', '#41AB5D', '#238B45', '#005A32'],
+    tooltipOn: true,
+    tooltipContent: function(d) {
+      var output = '';
+      for (var p in d.properties) {
+        output += p + ': ' + d.properties[p] + '<br />';
+      }
+      return output;
+    }
   };
   
   // Constructor
@@ -63,6 +71,12 @@ var SimpleMapD3 = (function() {
     this.canvas = this.container.append('svg')
       .attr('width', this.width)
       .attr('height', this.height);
+      
+    // Add tooltip
+    if (this.options.tooltipOn === true) {
+      this.container.classed('simple-map-d3-tooltip-container', true);
+      this.container.append('div').classed('simple-map-d3-tooltip', true);
+    }
   };
   
   // Project data into the canvas
@@ -147,7 +161,22 @@ var SimpleMapD3 = (function() {
         .attr('d', this.projOptions.path)
         .attr('stroke', this.options.stroke)
         .attr('fill', function(d) { return thisMap.attributeFill(d); })
-        .attr('transform', 'translate(' + this.projOptions.offsetxd + ', ' + this.projOptions.offsetyd + ')');
+        .attr('transform', 'translate(' + this.projOptions.offsetxd + ', ' + this.projOptions.offsetyd + ')')
+        .on('mouseover', function(d) {
+          // Tooltip
+          if (thisMap.options.tooltipOn === true) {
+            thisMap.container.select('.simple-map-d3-tooltip')
+              .style('display', 'block')
+              .html(thisMap.options.tooltipContent(d));
+          }
+        })
+        .on('mouseout', function(d) {
+          // Tooltip
+          if (thisMap.options.tooltipOn === true) {
+            thisMap.container.select('.simple-map-d3-tooltip')
+              .style('display', 'none');
+          }
+        });
   };
   
   // return module

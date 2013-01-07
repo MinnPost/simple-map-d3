@@ -8,6 +8,10 @@ Any latitude and longitude based GeoJSON file will work.
 
 ## Basic Usage
 
+Incluse CSS
+
+    <link rel="stylesheet" href="css/simple-map-d3.css">
+
 Include JS
   
     <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
@@ -57,6 +61,12 @@ when creating it:
 * ```colorStep```: The step to use for the color range.
   * Data type: numerical
   * Default: determined from the minimum and maximum of the color property data.
+* ```tooltipOn```: Whether to add a tooltip.
+  * Data type: boolean
+  * default: ```true```
+* ```tooltipContent```: Function that takes the data item as the argument, where ```d.properties``` are the GeoJSON properties of the feature, and returns HTML to fill in the tooltip.
+  * Data type: function
+  * default: Displays all properties (see code for details)
 
 ## API
 
