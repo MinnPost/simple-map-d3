@@ -12,6 +12,7 @@
   ],
   "dependencies": {
     "d3": "git://github.com/mbostock/d3.git#~3.2.8",
-    "simple": "https://github.com/michaelparenteau/simple.git"
+    "simple": "https://github.com/michaelparenteau/simple.git",
+    "topojson": "~1.2.3"
   }
 }

@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="bower_components/simple/stylesheets/screen.css" />
     <link rel="stylesheet" type="text/css" href="bower_components/simple/stylesheets/pygment_trac.css" />
     
-    <link rel="stylesheet" href="dist/simple-map-d3.css">
+    <link rel="stylesheet" href="lib/css/simple-map-d3.css">
     
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -21,7 +21,7 @@
     <header>
       <h1>Simple Map D3</h1>
       <div>
-        <h4>A very simple "chloropleth" style map with D3.</h4>
+        <h4>Easy "choropleth" style maps with D3.</h4>
       </div>
       <ul>
         <li><a href="https://github.com/MinnPost/simple-map-d3">view on github</a></li>
@@ -37,9 +37,10 @@
       
 <pre><code>bower install simple-map-d3</code></pre>
       
-      <p>Include dependencies:</p>
+      <p>Include dependencies (<a href="https://github.com/mbostock/topojson">Topojson</a> if you are using that format).</p>
     
-<pre><code>&lt;script src="bower_components/d3/d3.min.js" charset="utf-8"&gt;&lt;/script&gt;</code></pre>
+<pre><code>&lt;script src="bower_components/d3/d3.min.js" charset="utf-8"&gt;&lt;/script&gt;
+&lt;script src="bower_components/topojson/topojson.js" charset="utf-8"&gt;&lt;/script&gt;</code></pre>
       
       <p>Include library:</p>
       
@@ -55,7 +56,7 @@
 <pre><code>
   var map = new SimpleMapD3({
     container: '#simple-map-d3-example',
-    datasource: 'mn-county-2010.json'
+    datasource: 'mn-county-2010.geo.json'
   });
 </pre></code>
 
@@ -67,7 +68,7 @@
 <pre><code>
   var map1 = SimpleMapD3({
     container: '.simple-map-d3-example',
-    datasource: 'example-data/mn-county-2010.json',
+    datasource: 'example-data/mn-county-2010.geo.json',
     colorOn: true,
     colorProperty: 'POPULATION'
   });
@@ -80,7 +81,7 @@
 <pre><code>
   var map2 = SimpleMapD3({
     container: '.simple-map-d3-example-2',
-    datasource: 'example-data/dc-housing-units-census-tract.json',
+    datasource: 'example-data/dc-housing-units-census-tract.geo.json',
     colorOn: true,
     colorProperty: 'HOUSING10',
     colorSet: ['#FFFFE5', '#FFF7BC', '#FEE391', '#FEC44F', '#FE9929', '#EC7014', '#CC4C02', '#8C2D04'],
@@ -116,24 +117,21 @@
     </section>
 
     <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
-    <script type="text/javascript" src="dist/simple-map-d3.js"></script>
+    <script type="text/javascript" src="bower_components/topojson/topojson.js"></script>
+    <script type="text/javascript" src="lib/js/simple-map-d3.js"></script>
     
     
   <script type="text/javascript">
     var map1 = SimpleMapD3({
       container: '.simple-map-d3-example',
-      datasource: 'example-data/mn-county-2010.json',
+      datasource: 'example-data/mn-county-2010.geo.json',
       colorOn: true,
       colorProperty: 'POPULATION'
     });
     
     var map2 = SimpleMapD3({
       container: '.simple-map-d3-example-2',
-      datasource: 'example-data/dc-housing-units-census-tract.json',
-      colorOn: true,
-      colorProperty: 'HOUSING10',
-      colorSet: ['#FFFFE5', '#FFF7BC', '#FEE391', '#FEC44F', '#FE9929', '#EC7014', '#CC4C02', '#8C2D04'],
-      'stroke-width': 0
+      datasource: 'example-data/us-counties.topo.json'
     });
   </script>
     
