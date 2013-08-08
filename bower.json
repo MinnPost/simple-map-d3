@@ -1,0 +1,16 @@
+{
+  "name": "simple-map-d3",
+  "version": "0.1.0",
+  "main": "dist/simple-map-d3.min.js",
+  "ignore": [
+    "node_modules",
+    "bower_components",
+    "test",
+    "css",
+    "js",
+    "tests"
+  ],
+  "dependencies": {
+    "d3": "git://github.com/mbostock/d3.git#~3.2.8"
+  }
+}

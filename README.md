@@ -4,18 +4,18 @@ A very simple "choropleth" style map with tooltips with D3 (R2D3).  All you need
 
 ## Data
 
-Any latitude and longitude based GeoJSON file will work.
+Any latitude and longitude (EPSG:4326) based GeoJSON file will work.
 
 ## Basic Usage
 
 Incluse CSS
 
-    <link rel="stylesheet" href="css/simple-map-d3.css">
+    <link rel="stylesheet" href="dist/simple-map-d3.css">
 
 Include JS
   
     <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
-    <script type="text/javascript" src="js/simple-map-d3.js"></script>
+    <script type="text/javascript" src="dist/simple-map-d3.min.js"></script>
 
 Create container
 
@@ -24,7 +24,7 @@ Create container
 Create the map
 
     var map = new SimpleMapD3({
-      container: '.simple-map-d3-example',
+      container: '#simple-map-d3-example',
       datasource: 'data/mn-county-2010.json'
     });
 
@@ -33,7 +33,7 @@ Create the map
 Define colors and the property to use from the GeoJSON features and watch the magic happen:
 
     var map = new SimpleMapD3({
-      container: '.simple-map-d3-example',
+      container: '#simple-map-d3-example',
       datasource: 'data/mn-county-2010.json',
       colorOn: true,
       colorProperty: 'POPULATION',
@@ -77,3 +77,16 @@ to the map like so:
       container: '.simple-map-d3-example',
       data: yourOwnDataVariable
     });
+
+## Development
+
+### Install
+
+1. Install [NodeJS](http://nodejs.org/).
+1. Install [Grunt](http://gruntjs.com/): `npm install -g grunt-cli`
+1. Install [Bower](http://bower.io/): `npm install -g bower` 
+1. Install packages: `npm install && bower install`
+
+### Build
+
+1. Run: `grunt`

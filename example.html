@@ -22,21 +22,21 @@
   </div>
 
   <!-- Include scripts -->
-  <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+  <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
   <script type="text/javascript" src="js/simple-map-d3.js"></script>
   
   <!-- Make map -->
   <script type="text/javascript">
     var map1 = SimpleMapD3({
       container: '.simple-map-d3-example',
-      datasource: 'data/mn-county-2010.json',
+      datasource: 'example-data/mn-county-2010.json',
       colorOn: true,
       colorProperty: 'POPULATION'
     });
     
     var map2 = SimpleMapD3({
       container: '.simple-map-d3-example-2',
-      datasource: 'data/dc-housing-units-census-tract.json',
+      datasource: 'example-data/dc-housing-units-census-tract.json',
       colorOn: true,
       colorProperty: 'HOUSING10',
       colorSet: ['#FFFFE5', '#FFF7BC', '#FEE391', '#FEC44F', '#FE9929', '#EC7014', '#CC4C02', '#8C2D04'],
