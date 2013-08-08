@@ -4,7 +4,7 @@ A very simple "choropleth" style map with tooltips with D3.  All you need is a G
 
 ## Usage
 
-See [code.minnpost.com/simple-map-d3](//code.minnpost.com/simple-map-d3/) for instructions, configuration, and examples.
+See [code.minnpost.com/simple-map-d3](http://code.minnpost.com/simple-map-d3/) for instructions, configuration, and examples.
 
 ## Development
 
