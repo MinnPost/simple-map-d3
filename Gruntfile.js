@@ -7,9 +7,11 @@ module.exports = function(grunt) {
     meta: {
       banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
         '<%= grunt.template.today("yyyy-mm-dd") + "\\n" %>' +
-        '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
-        '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-        ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */' + 
+        '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
+        ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= _.isObject(pkg.author) ?  pkg.author.name : pkg.author %>;' +
+        ' Licensed <%= _.isArray(pkg.licenses) ? _.pluck(pkg.licenses, "type").join(", ") : pkg.license %>' + 
+        '<%= "\\n" %>' + 
+        ' */' +
         '<%= "\\n\\n" %>'
     },
     jshint: {
@@ -28,7 +30,8 @@ module.exports = function(grunt) {
     },
     concat: {
       options: {
-        separator: '\r\n\r\n'
+        separator: '\r\n\r\n',
+        banner: '<%= meta.banner %>'
       },
       dist: {
         src: ['js/*.js'],

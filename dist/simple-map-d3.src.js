@@ -1,3 +1,8 @@
+/*! simple-map-d3 - v0.1.1 - 2013-08-08
+ * http://code.minnpost.com/simple-map-d3/
+ * Copyright (c) 2013 Alan Palazzolo; Licensed MIT
+ */
+
 /**
  * Main JS for Simple Map (D3).
  *

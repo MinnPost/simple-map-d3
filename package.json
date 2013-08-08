@@ -1,7 +1,8 @@
 {
   "name": "simple-map-d3",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A very simple library for creating chloropleth type maps in D3 with a geojson source.",
+  "homepage": "http://code.minnpost.com/simple-map-d3/",
   "main": "dist/simple-map-d3.js",
   "devDependencies": {
     "grunt": "~0.4.1",
