@@ -1,0 +1,25 @@
+{
+  "name": "simple-map-d3",
+  "version": "0.1.0",
+  "description": "A very simple library for creating chloropleth type maps in D3 with a geojson source.",
+  "main": "dist/simple-map-d3.js",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-jshint": "~0.6.2",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-contrib-watch": "~0.5.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/MinnPost/simple-map-d3.git"
+  },
+  "author": "Alan Palazzolo",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "gitHead": "63058c5188ef1966cbc3b482fb9755c164030662"
+}

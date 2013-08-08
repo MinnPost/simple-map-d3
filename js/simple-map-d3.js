@@ -17,7 +17,9 @@ function SimpleMapD3(o) {
     tooltipContent: function(d) {
       var output = '';
       for (var p in d.properties) {
-        output += p + ': ' + d.properties[p] + '<br />';
+        if (d.properties.hasOwnProperty(p)) {
+          output += p + ': ' + d.properties[p] + '<br />';
+        }
       }
       return output;
     }
@@ -28,7 +30,9 @@ function SimpleMapD3(o) {
     // Extend defaults
     var extended = defaults;
     for (var prop in options) {
-      extended[prop] = options[prop];
+      if (options.hasOwnProperty(prop)) {
+        extended[prop] = options[prop];
+      }
     }
     smd.options = extended;
 
@@ -176,4 +180,4 @@ function SimpleMapD3(o) {
   // Construct and return our map object.
   smd.constructor(o);
   return smd;
-};
+}
