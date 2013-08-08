@@ -23,7 +23,7 @@ module.exports = function(grunt) {
         //maxlen: 80,
         indent: 2
       },
-      files: ['Gruntfile.js', 'js/*.js']
+      files: ['Gruntfile.js', 'lib/js/*.js']
     },
     clean: {
       folder: 'dist/'
@@ -34,11 +34,11 @@ module.exports = function(grunt) {
         banner: '<%= meta.banner %>'
       },
       dist: {
-        src: ['js/*.js'],
+        src: ['lib/js/*.js'],
         dest: 'dist/<%= pkg.name %>.src.js'
       },
       dist_css: {
-        src: ['css/*.css'], 
+        src: ['lib/css/*.css'], 
         dest: 'dist/<%= pkg.name %>.css'
       }
     },

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    
+    <link href='http://fonts.googleapis.com/css?family=PT+Serif' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="bower_components/simple/stylesheets/screen.css" />
+    <link rel="stylesheet" type="text/css" href="bower_components/simple/stylesheets/pygment_trac.css" />
+    
+    <link rel="stylesheet" href="dist/simple-map-d3.css">
+    
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    
+    <title>Simple Map D3</title>
+  </head>
+
+  <body>
+    <header>
+      <h1>Simple Map D3</h1>
+      <div>
+        <h4>A very simple "chloropleth" style map with D3.</h4>
+      </div>
+      <ul>
+        <li><a href="https://github.com/MinnPost/simple-map-d3">view on github</a></li>
+        <li><a href="https://github.com/MinnPost/simple-map-d3/zipball/master"><span>download</span> zip</a></li>
+        <li><a href="https://github.com/MinnPost/simple-map-d3/tarball/master"><span>download</span> tar</a></li>
+      </ul>
+    </header>
+
+    <section>
+      <h1>How to use</h1>
+    
+      <p>All you need is a dataset.  Installing with <a href="http://bower.io">Bower</a> is easy:</p>
+      
+<pre><code>bower install simple-map-d3</code></pre>
+      
+      <p>Include dependencies:</p>
+    
+<pre><code>&lt;script src="bower_components/d3/d3.min.js" charset="utf-8"&gt;&lt;/script&gt;</code></pre>
+      
+      <p>Include library:</p>
+      
+<pre><code>&lt;link rel="stylesheet" href="bower_components/simple-map-d3/dist/simple-map-d3.css"&gt;
+&lt;script src="bower_components/simple-map-d3/dist/simple-map-d3.js" charset="utf-8"&gt;&lt;/script&gt;</code></pre>
+
+      <p>Make a container:</p>
+    
+<pre><code>&lt;div id="simple-map-d3-example"&gt;&lt;/div&gt;</code></pre>
+
+      <p>Make a map:</p>
+
+<pre><code>
+  var map = new SimpleMapD3({
+    container: '#simple-map-d3-example',
+    datasource: 'mn-county-2010.json'
+  });
+</pre></code>
+
+      <h1>Examples</h1>
+      <h3>Population of Minnesota by County</h3>
+      <p>Minnesota census data per county, colored by population.</p>
+      <div class="simple-map-d3-example" style="background-color: #FFFFFF; width: 100%; height: 400px; border: 1px solid #898989; margin: 0 0 1em 0;"></div>
+      
+<pre><code>
+  var map1 = SimpleMapD3({
+    container: '.simple-map-d3-example',
+    datasource: 'example-data/mn-county-2010.json',
+    colorOn: true,
+    colorProperty: 'POPULATION'
+  });
+</pre></code>
+  
+      <h3>Housing Units of DC by Census Block</h3>
+      <p>DC census tracts colored by number of housing units, using a custom color set.</p>
+      <div class="simple-map-d3-example-2" style="background-color: #FFFFFF; width: 100%; height: 300px; border: 1px solid #898989; margin: 0 0 1em 0;"></div>
+      
+<pre><code>
+var map2 = SimpleMapD3({
+  container: '.simple-map-d3-example-2',
+  datasource: 'example-data/dc-housing-units-census-tract.json',
+  colorOn: true,
+  colorProperty: 'HOUSING10',
+  colorSet: ['#FFFFE5', '#FFF7BC', '#FEE391', '#FEC44F', '#FE9929', '#EC7014', '#CC4C02', '#8C2D04'],
+  'stroke-width': 0
+});
+</pre></code>
+
+      <h1>Data sources</h1>
+      
+      <p>Simple Map supports any latitude and longitude (EPSG:4326) based GeoJSON file will work.</p>
+
+      <h1>Options</h1>
+      
+      <p>The following is a list of supported options when using Simple Map.</p>
+      
+      <ul>
+        <li><code>container</code>: The DOM selector for the DOM element that will hold the map. This is required. <br> Type: <em>string</em>.</li>
+        <li><code>datasource</code>: String location of json file to use. This is required, unless you use the <code>data</code> property. <br> Type: <em>string</em>.</li>
+        <li><code>data</code>: Instead of using a JSON file source with the <code>datasource</code> property, you can directly use a dataset.  <br> Type: <em>object</em>.</li>
+        <li><code>colorOn</code>: Whether to process fill colors.  Use with <code>colorSet</code> and <code>colorProperty</code>. <br> Type: <em>boolean</em>; default: <em>false</em>.</li>
+        <li><code>colorSet</code>: An array of valid color strings. <br> Type: <em>array</em>; default: <em>Array of green colors from <a href="http://colorbrewer2.org/">ColorBrewer.org</a></em>.</li>
+        <li><code>colorProperty</code>: The property that will be used to determine the fill color.  This is a property found in the <code>properties</code> object of each feature in the GeoJSON file.  This will depend on your data. <br> Type: <em>string</em>.</li>
+        <li><code>colorStep</code>: The step to use for the color range. <br> Type: <em>numerical</em>: default: <em>determined from the minimum and maximum of the color property data</em>.</li>
+        <li><code>tooltipOn</code>: Whether to add a tooltip. <br> Type: <em>boolean</em>; default: <em>true</em>.</li>
+        <li><code>tooltipContent</code>: Function that takes the data item as the argument, where <code>d.properties</code> are the GeoJSON properties of the feature, and returns HTML to fill in the tooltip. <br> Type: <em>function</em>; default: <em>displays all properties</em>.</li>
+      </ul>
+      
+      <p></p>
+      
+      <footer>
+        Simple Map D3 is maintained by Alan Palazzolo and <a href="//minnpost.com">MinnPost</a>.
+      </footer>
+    </section>
+
+    <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
+    <script type="text/javascript" src="dist/simple-map-d3.js"></script>
+    
+    
+  <script type="text/javascript">
+    var map1 = SimpleMapD3({
+      container: '.simple-map-d3-example',
+      datasource: 'example-data/mn-county-2010.json',
+      colorOn: true,
+      colorProperty: 'POPULATION'
+    });
+    
+    var map2 = SimpleMapD3({
+      container: '.simple-map-d3-example-2',
+      datasource: 'example-data/dc-housing-units-census-tract.json',
+      colorOn: true,
+      colorProperty: 'HOUSING10',
+      colorSet: ['#FFFFE5', '#FFF7BC', '#FEE391', '#FEC44F', '#FE9929', '#EC7014', '#CC4C02', '#8C2D04'],
+      'stroke-width': 0
+    });
+  </script>
+    
+  </body>
+</html>

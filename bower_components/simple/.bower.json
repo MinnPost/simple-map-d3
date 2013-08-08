@@ -1,0 +1,13 @@
+{
+  "name": "simple",
+  "homepage": "https://github.com/michaelparenteau/simple",
+  "_release": "ecdc286cf9",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "ecdc286cf97945cd60de25e1127a9c6d13873474"
+  },
+  "_source": "https://github.com/michaelparenteau/simple.git",
+  "_target": "*",
+  "_direct": true
+}

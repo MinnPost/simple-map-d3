@@ -11,6 +11,7 @@
     "tests"
   ],
   "dependencies": {
-    "d3": "git://github.com/mbostock/d3.git#~3.2.8"
+    "d3": "git://github.com/mbostock/d3.git#~3.2.8",
+    "simple": "https://github.com/michaelparenteau/simple.git"
   }
 }
