@@ -131,7 +131,12 @@
     
     var map2 = SimpleMapD3({
       container: '.simple-map-d3-example-2',
-      datasource: 'example-data/us-counties.topo.json'
+      datasource: 'example-data/us-counties.topo.json',
+      tooltipOn: false,
+      styles: {
+        stroke: '#EDEDED',
+        fill: '#232323'
+      }
     });
   </script>
     
