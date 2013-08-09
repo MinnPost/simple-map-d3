@@ -75,23 +75,24 @@
 </pre></code>
   
       <h3>Europe Population Density Map</h3>
-      <p>A simple map of European countries and their population density using a different projection, a slight rotation, and a custom tooltip output.</p>
+      <p>A simple map of European countries and their population density using a different projection, a slight rotation, custom color set, and a custom tooltip output.</p>
       <div class="simple-map-d3-europe-pop-map" style="background-color: #FFFFFF; width: 100%; height: 500px; border: 1px solid #898989; margin: 0 0 1em 0;"></div>
       
 <pre><code>
-    var europePopMap = SimpleMapD3({
-      container: '.simple-map-d3-europe-pop-map',
-      datasource: 'example-data/europe-population-density-geocommons.geo.json',
-      colorOn: true,
-      colorProperty: 'population',
-      projection: 'azimuthalEqualArea',
-      rotation: [0, 0, -20],
-      tooltipContent: function(d) {
-        var p = d.properties;
-        return '&lt;h5&gt;' + p.country + '&lt;/h5&gt;' +
-          p.population + ' population per square kilometer';
-      }
-    });
+  var europePopMap = SimpleMapD3({
+    container: '.simple-map-d3-europe-pop-map',
+    datasource: 'example-data/europe-population-density-geocommons.geo.json',
+    colorSet: 'Spectral',
+    colorOn: true,
+    colorProperty: 'population',
+    projection: 'azimuthalEqualArea',
+    rotation: [0, 0, -20],
+    tooltipContent: function(d) {
+      var p = d.properties;
+      return '&lt;h5&gt;' + p.country + '&lt;/h5&gt;' +
+        p.population + ' population per square kilometer';
+    }
+  });
 </pre></code>
   
       <h3>Basic US Map</h3>
@@ -123,7 +124,7 @@
         <li><code>datasource</code>: String location of json file to use. This is required, unless you use the <code>data</code> property. <br> Type: <em>string</em>.</li>
         <li><code>data</code>: Instead of using a JSON file source with the <code>datasource</code> property, you can directly use a dataset.  <br> Type: <em>object</em>.</li>
         <li><code>colorOn</code>: Whether to process fill colors.  Use with <code>colorSet</code> and <code>colorProperty</code>. <br> Type: <em>boolean</em>; default: <em>false</em>.</li>
-        <li><code>colorSet</code>: An array of valid color strings. <br> Type: <em>array</em>; default: <em>Array of green colors from <a href="http://colorbrewer2.org/">ColorBrewer.org</a></em>.</li>
+        <li><code>colorSet</code>: An array of valid color strings or a string referring to a <a href="http://colorbrewer2.org/">ColorBrewer.org</a>. <br> Type: <em>array or string</em>; default: <em>a yellow, orange, brown combination</em>.</li>
         <li><code>colorProperty</code>: The property that will be used to determine the fill color.  This is a property found in the <code>properties</code> object of each feature in the GeoJSON file.  This will depend on your data. <br> Type: <em>string</em>.</li>
         <li><code>colorStep</code>: The step to use for the color range. <br> Type: <em>numerical</em>: default: <em>determined from the minimum and maximum of the color property data</em>.</li>
         <li><code>tooltipOn</code>: Whether to add a tooltip. <br> Type: <em>boolean</em>; default: <em>true</em>.</li>
@@ -166,6 +167,7 @@
     var europePopMap = SimpleMapD3({
       container: '.simple-map-d3-europe-pop-map',
       datasource: 'example-data/europe-population-density-geocommons.geo.json',
+      colorSet: 'Spectral',
       colorOn: true,
       colorProperty: 'population',
       projection: 'azimuthalEqualArea',
