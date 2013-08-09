@@ -63,29 +63,50 @@
       <h1>Examples</h1>
       <h3>Population of Minnesota by County</h3>
       <p>Minnesota census data per county, colored by population.</p>
-      <div class="simple-map-d3-example" style="background-color: #FFFFFF; width: 100%; height: 400px; border: 1px solid #898989; margin: 0 0 1em 0;"></div>
+      <div class="simple-map-d3-mn-pop-map" style="background-color: #FFFFFF; width: 100%; height: 360px; border: 1px solid #898989; margin: 0 0 1em 0;"></div>
       
 <pre><code>
-  var map1 = SimpleMapD3({
-    container: '.simple-map-d3-example',
+  var mnPopMap = SimpleMapD3({
+    container: '.simple-map-d3-mn-pop-map',
     datasource: 'example-data/mn-county-2010.geo.json',
     colorOn: true,
     colorProperty: 'POPULATION'
   });
 </pre></code>
   
-      <h3>Housing Units of DC by Census Block</h3>
-      <p>DC census tracts colored by number of housing units, using a custom color set.</p>
-      <div class="simple-map-d3-example-2" style="background-color: #FFFFFF; width: 100%; height: 300px; border: 1px solid #898989; margin: 0 0 1em 0;"></div>
+      <h3>Europe Population Density Map</h3>
+      <p>A simple map of European countries and their population density using a different projection, a slight rotation, and a custom tooltip output.</p>
+      <div class="simple-map-d3-europe-pop-map" style="background-color: #FFFFFF; width: 100%; height: 500px; border: 1px solid #898989; margin: 0 0 1em 0;"></div>
       
 <pre><code>
-  var map2 = SimpleMapD3({
-    container: '.simple-map-d3-example-2',
-    datasource: 'example-data/dc-housing-units-census-tract.geo.json',
-    colorOn: true,
-    colorProperty: 'HOUSING10',
-    colorSet: ['#FFFFE5', '#FFF7BC', '#FEE391', '#FEC44F', '#FE9929', '#EC7014', '#CC4C02', '#8C2D04'],
-    'stroke-width': 0
+    var europePopMap = SimpleMapD3({
+      container: '.simple-map-d3-europe-pop-map',
+      datasource: 'example-data/europe-population-density-geocommons.geo.json',
+      colorOn: true,
+      colorProperty: 'population',
+      projection: 'azimuthalEqualArea',
+      rotation: [0, 0, -20],
+      tooltipContent: function(d) {
+        var p = d.properties;
+        return '&lt;h5&gt;' + p.country + '&lt;/h5&gt;' +
+          p.population + ' population per square kilometer';
+      }
+    });
+</pre></code>
+  
+      <h3>Basic US Map</h3>
+      <p>A simple map of US counties using a Topojson data source with some custom styling.</p>
+      <div class="simple-map-d3-us-map" style="background-color: #FFFFFF; width: 100%; height: 300px; border: 1px solid #898989; margin: 0 0 1em 0;"></div>
+      
+<pre><code>
+  var usMap = SimpleMapD3({
+    container: '.simple-map-d3-us-map',
+    datasource: 'example-data/us-counties.topo.json',
+    tooltipOn: false,
+    styles: {
+      stroke: '#EDEDED',
+      fill: '#232323'
+    }
   });
 </pre></code>
 
@@ -125,20 +146,34 @@
     
     
   <script type="text/javascript">
-    var map1 = SimpleMapD3({
-      container: '.simple-map-d3-example',
+    var mnPopMap = SimpleMapD3({
+      container: '.simple-map-d3-mn-pop-map',
       datasource: 'example-data/mn-county-2010.geo.json',
       colorOn: true,
       colorProperty: 'POPULATION'
     });
     
-    var map2 = SimpleMapD3({
-      container: '.simple-map-d3-example-2',
+    var usMap = SimpleMapD3({
+      container: '.simple-map-d3-us-map',
       datasource: 'example-data/us-counties.topo.json',
       tooltipOn: false,
       styles: {
         stroke: '#EDEDED',
         fill: '#232323'
+      }
+    });
+    
+    var europePopMap = SimpleMapD3({
+      container: '.simple-map-d3-europe-pop-map',
+      datasource: 'example-data/europe-population-density-geocommons.geo.json',
+      colorOn: true,
+      colorProperty: 'population',
+      projection: 'azimuthalEqualArea',
+      rotation: [0, 0, -20],
+      tooltipContent: function(d) {
+        var p = d.properties;
+        return '<h5>' + p.country + '</h5>' +
+          p.population + ' population per square kilometer';
       }
     });
   </script>
