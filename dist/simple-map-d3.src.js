@@ -1,4 +1,4 @@
-/*! simple-map-d3 - v0.1.1 - 2013-08-08
+/*! simple-map-d3 - v0.1.2 - 2013-08-09
  * http://code.minnpost.com/simple-map-d3/
  * Copyright (c) 2013 Alan Palazzolo; Licensed MIT
  */
@@ -14,7 +14,7 @@ function SimpleMapD3(o) {
   var defaults = {
     'stroke-width': 1,
     stroke: '#898989',
-    fill: '#FFFFFF',
+    fill: '#BDBDBD',
     colorOn: false,
     colorSet: ['#F7FCF5', '#E5F5E0', '#C7E9C0', '#A1D99B', 
       '#74C476', '#41AB5D', '#238B45', '#005A32'],
@@ -27,7 +27,9 @@ function SimpleMapD3(o) {
         }
       }
       return output;
-    }
+    },
+    projection: 'albersUsa',
+    styles: {}
   };
   
   // Constructor
@@ -44,11 +46,13 @@ function SimpleMapD3(o) {
     // Check if data was given, or if data source was given
     if (smd.options.data === Object(smd.options.data)) {
       smd.data = smd.options.data;
-      smd.dataLoaded(smd.data);
+      smd.loadData(smd.data);
     }
     else if (toString.call(smd.options.datasource) == '[object String]') {
       smd.getData();
     }
+    
+    return smd;
   };
   
   // Get data
@@ -57,6 +61,8 @@ function SimpleMapD3(o) {
       smd.data = data;
       smd.loadData();
     });
+    
+    return smd;
   };
   
   // Handle data once loaded
@@ -64,9 +70,28 @@ function SimpleMapD3(o) {
     if (smd.data === void 0) {
       smd.data = data;
     }
-    smd.canvas();
-    smd.project();
-    smd.render();
+    smd.topo().canvas().projection().render().fit();
+    
+    return smd;
+  };
+  
+  // Handle topojson
+  smd.topo = function() {
+    var o, obj;
+    
+    if (smd.data.type.toLowerCase() === 'topology' && 
+      typeof topojson != 'undefined') {
+      // Use first object found (this should become configurable
+      for (o in smd.data.objects) {
+        if (smd.data.objects.hasOwnProperty(o)) {
+          obj = smd.data.objects[o];
+          break;
+        }
+      }
+      smd.data = topojson.feature(smd.data, smd.data.objects[o]);
+    }
+    
+    return smd;
   };
   
   // Load up canvas, set size to container
@@ -77,55 +102,59 @@ function SimpleMapD3(o) {
     smd.canvas = smd.container.append('svg')
       .attr('width', smd.width)
       .attr('height', smd.height);
+    smd.group = smd.canvas.append('g');
       
     // Add tooltip
     if (smd.options.tooltipOn === true) {
       smd.container.classed('simple-map-d3-tooltip-container', true);
       smd.container.append('div').classed('simple-map-d3-tooltip', true);
     }
+    
+    return smd;
   };
   
-  // Project data into the canvas
-  smd.project = function() {
-    smd.proj = d3.geo.mercator().scale(1).translate([0,0]);
-    smd.projOptions = smd.projOptions || {};
-    
-    // Variables
-    var margin = smd.width * 0.02;
-    var bounds0 = d3.geo.bounds(smd.data);
-    var bounds = bounds0.map(smd.proj);
-    var xscale = (smd.width - 2 * margin) / Math.abs(bounds[1][0] - bounds[0][0]);
-    var yscale = (smd.height - 2 * margin) / Math.abs(bounds[1][1] - bounds[0][1]);
-    var pscale = Math.min(xscale, yscale);
-    var wscale = pscale;
-    var d, widthd, heightd;
-    
-    // Handle projection
-    smd.proj.scale(pscale);
-    smd.proj.translate(smd.proj([-bounds0[0][0], -bounds0[1][1]]));
-    smd.projOptions.path = d3.geo.path().projection(smd.proj);
-    
-    // Handle svg canvas, dpeneding on orientation
-    if (xscale > yscale) {
-      d = xscale * Math.abs(bounds[1][0] - bounds[0][0]) - yscale * Math.abs(bounds[1][0] - bounds[0][0]);
-      smd.canvas.attr('transform', 'translate(' + d / 2 + ', 0)');
-    }
-    else {
-      d = yscale * Math.abs(bounds[1][1] - bounds[0][1]) - xscale * Math.abs(bounds[1][1] - bounds[0][1]);
-      smd.canvas.attr('transform', 'translate(0, ' + d / 5 + ')');
+  // Create projection
+  smd.projection = function() {
+    var projFunc = smd.options.projection;
+  
+    if (typeof projFunc == 'undefined' ||
+      typeof d3.geo[projFunc] != 'function') {
+      projFunc = 'albersUsa';
     }
     
-    // Handle offset, depending on orientation
-    widthd = smd.proj(bounds0[0])[1];
-    heightd = smd.proj(bounds0[1])[0];
-    if (xscale > yscale) {
-      smd.projOptions.offsetxd = (smd.width / 2 - widthd / 2);
-      smd.projOptions.offsetyd = margin;
+    smd.centroid = d3.geo.centroid(smd.data);
+    smd.projection = d3.geo[projFunc]()
+      .scale(1000)
+      .translate([smd.width / 2, smd.height / 2]);
+    
+    // Center if available
+    if (typeof smd.projection.center === 'function') {
+      smd.projection.center(smd.centroid);
     }
-    else {
-      smd.projOptions.offsetxd = margin;
-      smd.projOptions.offsetyd = (smd.height / 2 - heightd / 2);
+    
+    // Rotate if needed
+    if (typeof smd.options.rotation != 'undefined' &&
+      smd.options.rotation.length > 0 &&
+      typeof smd.projection.rotate === 'function') {
+      smd.projection.rotate(smd.options.rotation);
     }
+  
+    smd.projPath = d3.geo.path()
+      .projection(smd.projection);
+      
+    return smd;
+  };
+  
+  // Fit view
+  smd.fit = function() {
+    var b = smd.bounds = smd.projPath.bounds(smd.data);
+
+    smd.group.attr('transform',
+      'translate(' + smd.projection.translate() + ')' + 
+      'scale(' + 0.95 / Math.max((b[1][0] - b[0][0]) / smd.width, (b[1][1] - b[0][1]) / smd.height) + ')' +
+      'translate(' + -(b[1][0] + b[0][0]) / 2 + ',' + -(b[1][1] + b[0][1]) / 2 + ')');
+      
+    return smd;
   };
   
   // Make color range
@@ -139,6 +168,8 @@ function SimpleMapD3(o) {
       .domain(d3.range(min, max, smd.options.colorStep))
       .range(smd.options.colorSet)
       .clamp(true);
+    
+    return smd;
   };
   
   // Callback for attribute: Fill
@@ -156,15 +187,14 @@ function SimpleMapD3(o) {
   
   // Render
   smd.render = function() {
-    smd.canvas
+    smd.group
       .selectAll('path')
         .data(smd.data.features)
       .enter().append('path')
-        .attr('d', smd.projOptions.path)
-        .attr('stroke', smd.options.stroke)
-        .attr('stroke-width', smd.options['stroke-width'])
+        .attr('d', smd.projPath)
+        .attr('class', 'smd-path')
+        .style(smd.options.styles)
         .attr('fill', function(d) { return smd.attributeFill(d); })
-        .attr('transform', 'translate(' + smd.projOptions.offsetxd + ', ' + smd.projOptions.offsetyd + ')')
         .on('mouseover', function(d) {
           // Tooltip
           if (smd.options.tooltipOn === true) {
@@ -180,6 +210,8 @@ function SimpleMapD3(o) {
               .style('display', 'none');
           }
         });
+        
+    return smd;
   };
   
   // Construct and return our map object.
