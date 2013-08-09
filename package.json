@@ -1,6 +1,6 @@
 {
   "name": "simple-map-d3",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A very simple library for creating choropleth type maps in D3 with a geojson or topojson source.",
   "homepage": "http://code.minnpost.com/simple-map-d3/",
   "main": "dist/simple-map-d3.js",
