@@ -4,6 +4,7 @@
 .simple-map-d3-tooltip-container {
   position: relative;
 }
+
 .simple-map-d3-tooltip {
   position: absolute;
   display: none;
@@ -12,4 +13,15 @@
   border: 1px solid #898989;
   padding: .5em;
   font-size: .75em;
+}
+
+.smd-path {
+  stroke: #898989;
+  stroke-width: .4px;
+  stroke-opacity: .85;
+}
+
+.smd-path:hover {
+  stroke-opacity: 1;
+  stroke-width: .5px;
 }
