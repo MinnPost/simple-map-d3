@@ -107,6 +107,9 @@
         <li><code>colorStep</code>: The step to use for the color range. <br> Type: <em>numerical</em>: default: <em>determined from the minimum and maximum of the color property data</em>.</li>
         <li><code>tooltipOn</code>: Whether to add a tooltip. <br> Type: <em>boolean</em>; default: <em>true</em>.</li>
         <li><code>tooltipContent</code>: Function that takes the data item as the argument, where <code>d.properties</code> are the GeoJSON properties of the feature, and returns HTML to fill in the tooltip. <br> Type: <em>function</em>; default: <em>displays all properties</em>.</li>
+        <li><code>styles</code>: An object of SVG styles to add to each feature, such as <em>stroke</em> or <em>fill</em>; you can also use CSS to accomplish the same thing. <br> Type: <em>object</em>.</li>
+        <li><code>projection</code>: The name of the <a href="https://github.com/mbostock/d3/wiki/Geo-Projections#standard-projections">projection function provided by D3</a>.  Projections describe how to display geographical information and will drastically change how the map looks. <br> Type: <em>string</em>; default: <em>albersUSA</em>.</li>
+        <li><code>rotation</code>: The rotation array to use with the projection.  See the <a href="https://github.com/mbostock/d3/wiki/Geo-Paths#wiki-rotation">D3 documentation</a> for how it works.  For example, if you just want to rotate around the center of the map 30 degrees, pass <code>[0, 0, 30]</code>. <br> Type: <em>array</em>.</li>
       </ul>
       
       <p></p>
