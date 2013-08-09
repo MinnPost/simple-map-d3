@@ -85,6 +85,7 @@
     colorSet: 'Spectral',
     colorOn: true,
     colorProperty: 'population',
+    colorReverse: true,
     projection: 'azimuthalEqualArea',
     rotation: [0, 0, -20],
     tooltipContent: function(d) {
@@ -126,6 +127,7 @@
         <li><code>colorOn</code>: Whether to process fill colors.  Use with <code>colorSet</code> and <code>colorProperty</code>. <br> Type: <em>boolean</em>; default: <em>false</em>.</li>
         <li><code>colorSet</code>: An array of valid color strings or a string referring to a <a href="http://colorbrewer2.org/">ColorBrewer.org</a> color set; see below for keys to use. <br> Type: <em>array or string</em>; default: <em>a yellow, orange, brown combination</em>.</li>
         <li><code>colorProperty</code>: The property that will be used to determine the fill color.  This is a property found in the <code>properties</code> object of each feature in the GeoJSON file.  This will depend on your data. <br> Type: <em>string</em>.</li>
+        <li><code>colorReverse</code>: Reverses the color set; mostly useful if using an existing ColorBrewer set. <br> Type: <em>boolean</em>; default <em>false</em>.</li>
         <li><code>colorScale</code>: The scale function to use, either a custom function, or a valid <a href="https://github.com/mbostock/d3/wiki/Quantitative-Scales">D3 scale</a> such as <em>quantile</em> or <em>linear</em>.  This will affect how colors are matched to values. <br> Type: <em>string or function</em>: default: <em>quantile</em>.</li>
         <li><code>tooltipOn</code>: Whether to add a tooltip. <br> Type: <em>boolean</em>; default: <em>true</em>.</li>
         <li><code>tooltipContent</code>: Function that takes the data item as the argument, where <code>d.properties</code> are the GeoJSON properties of the feature, and returns HTML to fill in the tooltip. <br> Type: <em>function</em>; default: <em>displays all properties</em>.</li>
@@ -182,6 +184,7 @@
             colorSet: 'Spectral',
             colorOn: true,
             colorProperty: 'population',
+            colorReverse: true,
             projection: 'azimuthalEqualArea',
             rotation: [0, 0, -20],
             tooltipContent: function(d) {
