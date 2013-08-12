@@ -25,3 +25,13 @@
   stroke-opacity: 1;
   stroke-width: .5px;
 }
+
+.smd-legend-container {
+  stroke-width: .5pxpx;
+  fill: none;
+  stroke: #898989;
+}
+
+.smd-legend-label {
+  font-weight: bold;
+}
