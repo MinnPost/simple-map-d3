@@ -70,7 +70,8 @@
     container: '.simple-map-d3-mn-pop-map',
     datasource: 'example-data/mn-county-2010.geo.json',
     colorOn: true,
-    colorProperty: 'POPULATION'
+    colorProperty: 'POPULATION',
+    legendFormatter: d3.format(',f0')
   });
 </pre></code>
   
@@ -122,18 +123,29 @@
       
       <ul>
         <li><code>container</code>: The DOM selector for the DOM element that will hold the map. This is required. <br> Type: <em>string</em>.</li>
+        
         <li><code>datasource</code>: String location of json file to use. This is required, unless you use the <code>data</code> property. <br> Type: <em>string</em>.</li>
         <li><code>data</code>: Instead of using a JSON file source with the <code>datasource</code> property, you can directly use a dataset.  <br> Type: <em>object</em>.</li>
+        
         <li><code>colorOn</code>: Whether to process fill colors.  Use with <code>colorSet</code> and <code>colorProperty</code>. <br> Type: <em>boolean</em>; default: <em>false</em>.</li>
         <li><code>colorSet</code>: An array of valid color strings or a string referring to a <a href="http://colorbrewer2.org/">ColorBrewer.org</a> color set; see below for keys to use. <br> Type: <em>array or string</em>; default: <em>a yellow, orange, brown combination</em>.</li>
         <li><code>colorProperty</code>: The property that will be used to determine the fill color.  This is a property found in the <code>properties</code> object of each feature in the GeoJSON file.  This will depend on your data. <br> Type: <em>string</em>.</li>
         <li><code>colorReverse</code>: Reverses the color set; mostly useful if using an existing ColorBrewer set. <br> Type: <em>boolean</em>; default <em>false</em>.</li>
         <li><code>colorScale</code>: The scale function to use, either a custom function, or a valid <a href="https://github.com/mbostock/d3/wiki/Quantitative-Scales">D3 scale</a> such as <em>quantile</em> or <em>linear</em>.  This will affect how colors are matched to values. <br> Type: <em>string or function</em>: default: <em>quantile</em>.</li>
+        
         <li><code>tooltipOn</code>: Whether to add a tooltip. <br> Type: <em>boolean</em>; default: <em>true</em>.</li>
         <li><code>tooltipContent</code>: Function that takes the data item as the argument, where <code>d.properties</code> are the GeoJSON properties of the feature, and returns HTML to fill in the tooltip. <br> Type: <em>function</em>; default: <em>displays all properties</em>.</li>
+        
         <li><code>styles</code>: An object of SVG styles to add to each feature, such as <em>stroke</em> or <em>fill</em>; you can also use CSS to accomplish the same thing. <br> Type: <em>object</em>.</li>
+        
         <li><code>projection</code>: The name of the <a href="https://github.com/mbostock/d3/wiki/Geo-Projections#standard-projections">projection function provided by D3</a>.  Projections describe how to display geographical information and will drastically change how the map looks. <br> Type: <em>string</em>; default: <em>albersUSA</em>.</li>
         <li><code>rotation</code>: The rotation array to use with the projection.  See the <a href="https://github.com/mbostock/d3/wiki/Geo-Paths#wiki-rotation">D3 documentation</a> for how it works.  For example, if you just want to rotate around the center of the map 30 degrees, pass <code>[0, 0, 30]</code>. <br> Type: <em>array</em>.</li>
+
+        <li><code>legendOn</code>: Turns legend on, though not all scales support a legend at the moment. <br> Type: <em>boolean</em>; default: <em>true</em>.</li>
+        <li><code>legendTitle</code>: The title for the legend box. <br> Type: <em>string</em>; default: <em>Legend</em>.</li>
+        <li><code>legendFormatter</code>: Function for formatting numbers in legend. <br> Type: <em>function</em>; default: <em>d3.format(',')</em>.</li>
+        <li><code>legendWidth</code>: Width of legend box. <br> Type: <em>string</em>; default: <em>container width / 5</em>.</li>
+        <li><code>legendScale</code>: Scale of legend box. <br> Type: <em>number</em>; default: <em>1</em>.</li>
       </ul>
       
       <h2>Color set reference</h2>
@@ -165,7 +177,8 @@
             container: '.simple-map-d3-mn-pop-map',
             datasource: 'example-data/mn-county-2010.geo.json',
             colorOn: true,
-            colorProperty: 'POPULATION'
+            colorProperty: 'POPULATION',
+            legendFormatter: d3.format(',f0')
           });
           
           var usMap = SimpleMapD3({
