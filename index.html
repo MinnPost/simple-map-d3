@@ -76,7 +76,7 @@
 </pre></code>
   
       <h3>Europe Population Density Map</h3>
-      <p>A simple map of European countries and their population density using a different projection, a slight rotation, custom color set, and a custom tooltip output.</p>
+      <p>A simple map of European countries and their population density using a different projection, a slight rotation, custom color set, ability to pan, and a custom tooltip output.</p>
       <div class="simple-map-d3-europe-pop-map" style="background-color: #FFFFFF; width: 100%; height: 500px; border: 1px solid #898989; margin: 0 0 1em 0;"></div>
       
 <pre><code>
@@ -89,6 +89,7 @@
     colorReverse: true,
     projection: 'azimuthalEqualArea',
     rotation: [0, 0, -20],
+    grabOn: true,
     tooltipContent: function(d) {
       var p = d.properties;
       return '&lt;h5&gt;' + p.country + '&lt;/h5&gt;' +
@@ -135,6 +136,8 @@
         
         <li><code>tooltipOn</code>: Whether to add a tooltip. <br> Type: <em>boolean</em>; default: <em>true</em>.</li>
         <li><code>tooltipContent</code>: Function that takes the data item as the argument, where <code>d.properties</code> are the GeoJSON properties of the feature, and returns HTML to fill in the tooltip. <br> Type: <em>function</em>; default: <em>displays all properties</em>.</li>
+        
+        <li><code>grabOn</code>: Enables grabbing and panning. <br> Type: <em>boolean</em>; default: <em>false</em>.</li>
         
         <li><code>styles</code>: An object of SVG styles to add to each feature, such as <em>stroke</em> or <em>fill</em>; you can also use CSS to accomplish the same thing. <br> Type: <em>object</em>.</li>
         
@@ -200,6 +203,7 @@
             colorReverse: true,
             projection: 'azimuthalEqualArea',
             rotation: [0, 0, -20],
+            dragOn: true,
             tooltipContent: function(d) {
               var p = d.properties;
               return '<h5>' + p.country + '</h5>' +
