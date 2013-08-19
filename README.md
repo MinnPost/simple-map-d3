@@ -25,6 +25,10 @@ The example page is built with some other libraries.
 
     bower install https://github.com/michaelparenteau/simple.git topojson#~1.2.3 jquery#~2.0.3
 
+### Testing
+
+There are some very basic tests in the `tests/` folder.  Run them like so: `node tests/core.js`
+
 ### Browser support
 
 As this library depends heavily on D3 and SVG, Simple Map will only work in "modern" browsers.  The following is some basic tests run on Tesling.
