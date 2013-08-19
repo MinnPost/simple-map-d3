@@ -19,12 +19,6 @@ See [code.minnpost.com/simple-map-d3](http://code.minnpost.com/simple-map-d3/) f
 
 1. Run: `grunt`
 
-## Example
-
-The example page is built with some other libraries.
-
-    bower install https://github.com/michaelparenteau/simple.git topojson#~1.2.3 jquery#~2.0.3
-
 ### Testing
 
 There are some very basic tests in the `tests/` folder.  Run them like so: `node tests/core.js`
