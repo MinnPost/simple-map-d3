@@ -89,7 +89,7 @@
     colorReverse: true,
     projection: 'azimuthalEqualArea',
     rotation: [0, 0, -20],
-    grabOn: true,
+    dragOn: true,
     tooltipContent: function(d) {
       var p = d.properties;
       return '&lt;h5&gt;' + p.country + '&lt;/h5&gt;' +
@@ -137,12 +137,12 @@
         <li><code>tooltipOn</code>: Whether to add a tooltip. <br> Type: <em>boolean</em>; default: <em>true</em>.</li>
         <li><code>tooltipContent</code>: Function that takes the data item as the argument, where <code>d.properties</code> are the GeoJSON properties of the feature, and returns HTML to fill in the tooltip. <br> Type: <em>function</em>; default: <em>displays all properties</em>.</li>
         
-        <li><code>grabOn</code>: Enables grabbing and panning. <br> Type: <em>boolean</em>; default: <em>false</em>.</li>
+        <li><code>dragOn</code>: Enables dragging and panning. <br> Type: <em>boolean</em>; default: <em>false</em>.</li>
         
         <li>There are a number of style configuration options that will be set on SVG objects.  It is suggested to use CSS for these sorts of thing, but there are use-cases for direct setting of the styles.  The following are the available styles: <ul>
           <li><code>styles</code>: Styles for each map feature.  The fill will be overrided if color is on.</li>
           <li><code>stylesHover</code>: Styles to apply to hover state of map feature.</li>
-          <li><code>stylesCanvas</code>: Styles for the main SVG canvas.</li>
+          <li><code>stylesBackground</code>: Styles for a background container.</li>
           <li><code>stylesLegendContainer</code>: Styles for legend container.</li>
           <li><code>stylesLegendTitleText</code>: Styles for legend title text.</li>
           <li><code>stylesLegendText</code>: Styles for each legend item text.</li>
