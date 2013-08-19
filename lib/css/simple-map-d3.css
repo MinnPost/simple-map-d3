@@ -22,10 +22,16 @@
   cursor: -moz-grab;
   cursor: -webkit-grab;
 }
+
 .smd-canvas.smd-draggable.dragging {
   cursor: grabbing;
   cursor: -moz-grabbing;
   cursor: -webkit-grabbing;
+}
+
+.smd-background {
+  fill: transparent;
+  stroke: 0;
 }
 
 .smd-path {
