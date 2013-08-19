@@ -1,4 +1,4 @@
-/*! simple-map-d3 - v0.1.3 - 2013-08-09
+/*! simple-map-d3 - v0.1.4 - 2013-08-18
  * http://code.minnpost.com/simple-map-d3/
  * Copyright (c) 2013 Alan Palazzolo; Licensed MIT
  */
@@ -27,7 +27,16 @@ function SimpleMapD3(o) {
       return output;
     },
     projection: 'albersUsa',
-    styles: {}
+    legendFormatter: d3.format(','),
+    legendOn: true,
+    legendTitle: 'Legend',
+    styles: {},
+    stylesHover: {},
+    stylesLegendContainer: {},
+    stylesLegendTitleText: {},
+    stylesLegendText: {},
+    stylesLegendSwatch: {},
+    dragOn: false
   };
   
   // Colorbrewer colors borrowed from Chroma.js
@@ -102,6 +111,9 @@ function SimpleMapD3(o) {
     if (smd.options.colorReverse === true) {
       smd.options.colorSet = smd.options.colorSet.reverse();
     }
+    
+    // Create event dispatcher using D3
+    smd.events = d3.dispatch('dataLoaded', 'rendered');
 
     // Check if data was given, or if data source was given
     if (smd.options.data === Object(smd.options.data)) {
@@ -130,7 +142,15 @@ function SimpleMapD3(o) {
     if (smd.data === void 0) {
       smd.data = data;
     }
-    smd.topo().canvas().projection().render().fit();
+    
+    // Call data loaded event
+    smd.events.dataLoaded(smd);
+    
+    // Render everything
+    smd.topo().canvas().projection().render().fit().legend().drag();
+    
+    // Call rendered event
+    smd.events.rendered(smd);
     
     return smd;
   };
@@ -161,8 +181,15 @@ function SimpleMapD3(o) {
     smd.height = parseFloat(smd.container.style('height'));
     smd.canvas = smd.container.append('svg')
       .attr('width', smd.width)
-      .attr('height', smd.height);
-    smd.group = smd.canvas.append('g');
+      .attr('height', smd.height)
+      .attr('class', 'smd-canvas')
+      .classed('smd-draggable', smd.options.dragOn)
+      .classed('smd-tooltipped', smd.options.tooltipOn)
+      .data([{ x: 0, y: 0 }]);
+      
+    smd.draggableGroup = smd.canvas.append('g')
+      .attr('class', 'smd-draggable-group');
+    smd.featureGroup = smd.draggableGroup.append('g').attr('class', 'smd-feature-group');
       
     // Add tooltip
     if (smd.options.tooltipOn === true) {
@@ -209,9 +236,9 @@ function SimpleMapD3(o) {
   smd.fit = function() {
     var b = smd.bounds = smd.projPath.bounds(smd.data);
 
-    smd.group.attr('transform',
-      'translate(' + smd.projection.translate() + ')' + 
-      'scale(' + 0.95 / Math.max((b[1][0] - b[0][0]) / smd.width, (b[1][1] - b[0][1]) / smd.height) + ')' +
+    smd.featureGroup.attr('transform',
+      'translate(' + smd.projection.translate() + ') ' + 
+      'scale(' + 0.95 / Math.max((b[1][0] - b[0][0]) / smd.width, (b[1][1] - b[0][1]) / smd.height) + ') ' +
       'translate(' + -(b[1][0] + b[0][0]) / 2 + ',' + -(b[1][1] + b[0][1]) / 2 + ')');
       
     return smd;
@@ -246,14 +273,102 @@ function SimpleMapD3(o) {
     return smd;
   };
   
-  // Callback for attribute: Fill
-  smd.attributeFill = function(d) {
-    if (smd.options.colorOn === false) {
-      return smd.options.fill;
+  // Dragging functinoality
+  smd.dragging = false;
+  smd.drag = function() {
+    smd.dragIt = d3.behavior.drag()
+      .on('drag', function(d) {
+        if (smd.options.dragOn !== true) {
+          return true;
+        }
+        smd.dragging = true;
+        smd.canvas.classed('dragging', true);
+        d3.event.sourceEvent.stopPropagation();
+        d.x += d3.event.dx;
+        d.y += d3.event.dy;
+        
+        smd.draggableGroup.attr('transform', 'translate(' + [d.x, d.y] + ')');
+      })
+      .on('dragend', function() {
+        smd.canvas.classed('dragging', false);
+        smd.dragging = false;
+      });
+
+    smd.canvas.call(smd.dragIt);
+    return smd;
+  };  
+  
+  // Make legend
+  smd.legend = function() {
+    var qs;
+    var formatter = smd.options.legendFormatter || d3.format(',');
+    var legendSwatches;
+    var unit = 10;
+    var width = smd.options.legendWidth || (smd.width / 5);
+    var scale = smd.options.legendScale || 1;
+    
+    // Make sure legend is on
+    if (smd.options.legendOn !== true) {
+      return smd;
     }
-    else {
-      return smd.colorRange(d.properties[smd.options.colorProperty]);
+    
+    // Specific to scale type, unfortunately
+    if (smd.options.colorScale === 'quantile' &&
+      typeof smd.colorRange != 'undefined') {
+      legendSwatches = smd.colorRange.quantiles();
     }
+    
+    // Specific to scale type, unfortunately
+    if (legendSwatches && legendSwatches.length > 0) {
+      // Make group for legend objects
+      smd.legendGroup = smd.canvas.append('g');
+      
+      // Make container and label for legend
+      smd.legendGroup.append('rect')
+        .attr('class', 'smd-legend-container')
+        .attr('width', width)
+        .attr('height', legendSwatches.length * (unit * 2) + (unit * 3))
+        .attr('x', unit)
+        .attr('y', unit)
+        .style(smd.options.stylesLegendContainer);
+      smd.legendGroup.append('text')
+        .attr('class', 'smd-legend-label')
+        .attr('font-size', unit)
+        .attr('x', (unit * 2))
+        .attr('y', (unit * 3))
+        .text(smd.options.legendTitle)
+        .style(smd.options.stylesLegendTitleText);
+      
+      // Add colors swatches
+      smd.legendGroup
+        .selectAll('rect.smd-legend-swatch')
+          .data(legendSwatches)
+        .enter().append('rect')
+          .attr('class', 'smd-legend-swatch')
+          .attr('width', unit)
+          .attr('height', unit)
+          .attr('x', (unit * 2))
+          .attr('y', function(d, i) { return (i * unit * 2) + (unit * 4); })
+          .style(smd.options.stylesLegendSwatch)
+          .style('fill', function(d, i) { return smd.colorRange(d); });
+          
+      // Add text label
+      smd.legendGroup
+        .selectAll('text.smd-legend-amount')
+          .data(legendSwatches)
+        .enter().append('text')
+          .attr('class', 'smd-legend-amount')
+          .attr('font-size', unit)
+          .attr('x', (unit * 4))
+          .attr('y', function(d, i) { return (i * unit * 2) + (unit * 5 - 1); })
+          .text(function(d, i) { return '>= ' + formatter(d); })
+          .style(smd.options.stylesLegendText);
+      
+      // Scale
+      smd.legendGroup.attr('transform', 'scale(' + scale + ')');
+    }
+  
+    return smd;
   };
   
   // Render
@@ -264,14 +379,21 @@ function SimpleMapD3(o) {
     }
   
     // Render paths
-    smd.group
+    smd.featureGroup
       .selectAll('path')
         .data(smd.data.features)
       .enter().append('path')
         .attr('d', smd.projPath)
         .attr('class', 'smd-path')
         .style(smd.options.styles)
-        .attr('fill', function(d) { return smd.attributeFill(d); })
+        .attr('fill', function(d) {
+          if (smd.options.colorOn === false) {
+            return smd.options.fill;
+          }
+          else {
+            return smd.colorRange(d.properties[smd.options.colorProperty]);
+          }
+        })
         .on('mouseover', function(d) {
           // Tooltip
           if (smd.options.tooltipOn === true) {
@@ -279,6 +401,9 @@ function SimpleMapD3(o) {
               .style('display', 'block')
               .html(smd.options.tooltipContent(d));
           }
+          
+          // Styles
+          d3.select(this).style(smd.options.stylesHover);
         })
         .on('mouseout', function(d) {
           // Tooltip
@@ -286,6 +411,9 @@ function SimpleMapD3(o) {
             smd.container.select('.simple-map-d3-tooltip')
               .style('display', 'none');
           }
+          
+          // Styles
+          d3.select(this).style(smd.options.styles);
         });
         
     return smd;
