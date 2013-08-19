@@ -114,9 +114,27 @@
   });
 </pre></code>
 
+      <h3>World Map</h3>
+      <p>A simple map of 2005 world population with graticule and globe turned on.</p>
+      <div class="simple-map-d3-world-map" style="background-color: #FFFFFF; width: 100%; height: 400px; border: 1px solid #898989; margin: 0 0 1em 0;"></div>
+      
+<pre><code>
+  var worldMap = SimpleMapD3({
+    container: '.simple-map-d3-world-map',
+    datasource: 'example-data/world-population.geo.json',
+    projection: 'equirectangular',
+    colorOn: true,
+    colorProperty: 'POP2005',
+    tooltipOn: true,
+    graticuleOn: true,
+    globeOn: true,
+    legendOn: false
+  });
+</code></pre>
+
       <h1>Data sources</h1>
       
-      <p>Simple Map supports any latitude and longitude (EPSG:4326) based GeoJSON file will work.</p>
+      <p>Simple Map supports any latitude and longitude (EPSG:4326) based GeoJSON or TopoJSON file.</p>
 
       <h1>Options</h1>
       
@@ -147,6 +165,8 @@
           <li><code>stylesLegendTitleText</code>: Styles for legend title text.</li>
           <li><code>stylesLegendText</code>: Styles for each legend item text.</li>
           <li><code>stylesLegendSwatch</code>: Styles for each legend item color swatch.</li>
+          <li><code>stylesGraticule</code>: Styles for the graticule.</li>
+          <li><code>stylesGlobe</code>: Styles for the globe.</li>
         </ul>
         
         <li><code>projection</code>: The name of the <a href="https://github.com/mbostock/d3/wiki/Geo-Projections#standard-projections">projection function provided by D3</a>.  Projections describe how to display geographical information and will drastically change how the map looks. <br> Type: <em>string</em>; default: <em>albersUSA</em>.</li>
@@ -157,6 +177,8 @@
         <li><code>legendFormatter</code>: Function for formatting numbers in legend. <br> Type: <em>function</em>; default: <em>d3.format(',')</em>.</li>
         <li><code>legendWidth</code>: Width of legend box. <br> Type: <em>string</em>; default: <em>container width / 5</em>.</li>
         <li><code>legendScale</code>: Scale of legend box. <br> Type: <em>number</em>; default: <em>1</em>.</li>
+        <li><code>graticuleOn</code>: Adds a simple <a href="http://en.wikipedia.org/wiki/Geographic_coordinate_system">graticule grid</a>. <br> Type: <em>boolean</em>; default: <em>false</em>.</li>
+        <li><code>globeOn</code>: Adds a container around the globe that could be used for an outline. <br> Type: <em>boolean</em>; default: <em>false</em>.</li>
       </ul>
       
       <h2>Color set reference</h2>
@@ -240,6 +262,18 @@
               return '<h5>' + p.country + '</h5>' +
                 p.population + ' population per square kilometer';
             }
+          });
+          
+          var worldMap = SimpleMapD3({
+            container: '.simple-map-d3-world-map',
+            datasource: 'example-data/world-population.geo.json',
+            projection: 'equirectangular',
+            colorOn: true,
+            colorProperty: 'POP2005',
+            tooltipOn: true,
+            graticuleOn: true,
+            globeOn: true,
+            legendOn: false
           });
           
           // Sample event

@@ -59,3 +59,16 @@
 .smd-legend-label {
   font-weight: bold;
 }
+
+.smd-graticule {
+  fill: none;
+  stroke: #222222;
+  stroke-width: .5px;
+  stroke-opacity: .75;
+}
+
+.smd-globe {
+  fill: none;
+  stroke: #222222;
+  stroke-width: 3px;
+}
