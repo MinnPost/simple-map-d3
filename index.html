@@ -139,7 +139,14 @@
         
         <li><code>grabOn</code>: Enables grabbing and panning. <br> Type: <em>boolean</em>; default: <em>false</em>.</li>
         
-        <li><code>styles</code>: An object of SVG styles to add to each feature, such as <em>stroke</em> or <em>fill</em>; you can also use CSS to accomplish the same thing. <br> Type: <em>object</em>.</li>
+        <li>There are a number of style configuration options that will be set on SVG objects.  It is suggested to use CSS for these sorts of thing, but there are use-cases for direct setting of the styles.  The following are the available styles: <ul>
+          <li><code>styles</code>: Styles for each map feature.  The fill will be overrided if color is on.</li>
+          <li><code>stylesHover</code>: Styles to apply to hover state of map feature.</li>
+          <li><code>stylesLegendContainer</code>: Styles for legend container.</li>
+          <li><code>stylesLegendTitleText</code>: Styles for legend title text.</li>
+          <li><code>stylesLegendText</code>: Styles for each legend item text.</li>
+          <li><code>stylesLegendSwatch</code>: Styles for each legend item color swatch.</li>
+        </ul>
         
         <li><code>projection</code>: The name of the <a href="https://github.com/mbostock/d3/wiki/Geo-Projections#standard-projections">projection function provided by D3</a>.  Projections describe how to display geographical information and will drastically change how the map looks. <br> Type: <em>string</em>; default: <em>albersUSA</em>.</li>
         <li><code>rotation</code>: The rotation array to use with the projection.  See the <a href="https://github.com/mbostock/d3/wiki/Geo-Paths#wiki-rotation">D3 documentation</a> for how it works.  For example, if you just want to rotate around the center of the map 30 degrees, pass <code>[0, 0, 30]</code>. <br> Type: <em>array</em>.</li>
