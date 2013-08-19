@@ -161,6 +161,29 @@
         </tbody>
       </table>
       
+      <h2>Events</h2>
+      
+      <p>There are a couple custom events that are fired through the map rendering process that may be helpful.  These are created with the <a href="https://github.com/mbostock/d3/wiki/Internals#wiki-dispatch">D3.dispatch system</a>, and internally under <code>.events</code> object.</p>
+      
+      <ul>
+        <li><code>dataLoaded</code>: This event is trigger once the data is loaded, if you are not using a data source, this will be very instant.  Use it like so: <br />
+<pre><code>
+  var europePopMap = SimpleMapD3({ ... });
+  europePopMap.events.on('dataLoaded.YOUR_NAMESPACE', function(smd) {
+    // Do your thing
+  });
+</code></pre>
+        </li>
+        <li><code>rendered</code>: This event is triggered after everything has been rendered and is a good place to do any modifications to the map: <br />
+<pre><code>
+  var europePopMap = SimpleMapD3({ ... });
+  europePopMap.events.on('rendered.YOUR_NAMESPACE', function(smd) {
+    // Do your thing
+  });
+</code></pre>
+        </li>
+      </ul>
+      
       <p></p>
       
       <footer>
@@ -209,6 +232,14 @@
               return '<h5>' + p.country + '</h5>' +
                 p.population + ' population per square kilometer';
             }
+          });
+          
+          // Sample event
+          europePopMap.events.on('dataLoaded.TEST', function() {
+            //console.log(arguments, this);
+          });
+          europePopMap.events.on('rendered.TEST', function() {
+            //console.log(arguments, this);
           });
           
           // Generate colors references (very hacky)
