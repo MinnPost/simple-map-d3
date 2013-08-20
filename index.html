@@ -115,7 +115,7 @@
 </pre></code>
 
       <h3>World Map</h3>
-      <p>A simple map of 2005 world population with graticule and globe turned on.</p>
+      <p>A simple map of 2005 world population with graticule and globe turned on and started "manually".</p>
       <div class="simple-map-d3-world-map" style="background-color: #FFFFFF; width: 100%; height: 400px; border: 1px solid #898989; margin: 0 0 1em 0;"></div>
       
 <pre><code>
@@ -130,8 +130,9 @@
     tooltipOn: true,
     graticuleOn: true,
     globeOn: true,
-    legendOn: false
-  });
+    legendOn: false,
+    startManually: true
+  }).start();
 </code></pre>
 
       <h1>Data sources</h1>
@@ -183,6 +184,8 @@
         <li><code>legendScale</code>: Scale of legend box. <br> Type: <em>number</em>; default: <em>1</em>.</li>
         <li><code>graticuleOn</code>: Adds a simple <a href="http://en.wikipedia.org/wiki/Geographic_coordinate_system">graticule grid</a>. <br> Type: <em>boolean</em>; default: <em>false</em>.</li>
         <li><code>globeOn</code>: Adds a container around the globe that could be used for an outline. <br> Type: <em>boolean</em>; default: <em>false</em>.</li>
+        
+        <li><code>startManually</code>: Whether to automatically start the data and rendering process.  If false, the configuration will be loaded, but data will not be loaded or the map will not be rendered.  This can be helpful in order register events properly. <br> Type: <em>boolean</em>; default: <em>false</em>.</li>
         
         <li><code>mapOffset</code>: An x, y array that offsets the map from the top left. <br> Type: <em>array</em>; default: <em>[0, 0]</em>.</li>
         <li><code>legendOffset</code>: An x, y array that offsets the legend from the top left. <br> Type: <em>array</em>; default: <em>[10, 10]</em>.</li>
@@ -281,8 +284,10 @@
             colorScale: 'quantize',
             tooltipOn: true,
             graticuleOn: true,
-            globeOn: true
-          });
+            globeOn: true,
+            legendOn: false,
+            startManually: true
+          }).start();
           
           // Basic test to ensure that a blank config will be ok
           var mapBlank = SimpleMapD3({ });
