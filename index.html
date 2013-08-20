@@ -183,6 +183,9 @@
         <li><code>legendScale</code>: Scale of legend box. <br> Type: <em>number</em>; default: <em>1</em>.</li>
         <li><code>graticuleOn</code>: Adds a simple <a href="http://en.wikipedia.org/wiki/Geographic_coordinate_system">graticule grid</a>. <br> Type: <em>boolean</em>; default: <em>false</em>.</li>
         <li><code>globeOn</code>: Adds a container around the globe that could be used for an outline. <br> Type: <em>boolean</em>; default: <em>false</em>.</li>
+        
+        <li><code>mapOffset</code>: An x, y array that offsets the map from the top left. <br> Type: <em>array</em>; default: <em>[0, 0]</em>.</li>
+        <li><code>legendOffset</code>: An x, y array that offsets the legend from the top left. <br> Type: <em>array</em>; default: <em>[10, 10]</em>.</li>
       </ul>
       
       <h2>Color set reference</h2>
@@ -278,8 +281,7 @@
             colorScale: 'quantize',
             tooltipOn: true,
             graticuleOn: true,
-            globeOn: true,
-            legendOn: false
+            globeOn: true
           });
           
           // Basic test to ensure that a blank config will be ok
