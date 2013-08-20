@@ -17,13 +17,15 @@
   background-color: rgba(255, 255, 255, 0.9);
 }
 
-.smd-canvas.smd-draggable { 
+.smd-canvas.smd-draggable,
+.smd-draggable { 
   cursor: grab;
   cursor: -moz-grab;
   cursor: -webkit-grab;
 }
 
-.smd-canvas.smd-draggable.dragging {
+.smd-canvas.smd-draggable.dragging,
+.smd-draggable.dragging {
   cursor: grabbing;
   cursor: -moz-grabbing;
   cursor: -webkit-grabbing;
