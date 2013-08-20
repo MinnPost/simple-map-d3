@@ -89,7 +89,7 @@
     colorReverse: true,
     projection: 'azimuthalEqualArea',
     rotation: [0, 0, -20],
-    dragOn: true,
+    canvasDragOn: true,
     tooltipContent: function(d) {
       var p = d.properties;
       return '&lt;h5&gt;' + p.country + '&lt;/h5&gt;' +
@@ -157,7 +157,9 @@
         <li><code>tooltipOn</code>: Whether to add a tooltip. <br> Type: <em>boolean</em>; default: <em>true</em>.</li>
         <li><code>tooltipContent</code>: Function that takes the data item as the argument, where <code>d.properties</code> are the GeoJSON properties of the feature, and returns HTML to fill in the tooltip. <br> Type: <em>function</em>; default: <em>displays all properties</em>.</li>
         
-        <li><code>dragOn</code>: Enables dragging and panning. <br> Type: <em>boolean</em>; default: <em>false</em>.</li>
+        <li><code>canvasDragOn</code>: Enables dragging and panning for the map from the whole canvas.  this is a useful interaction for users. This will interfere with the other dragging options.  <br> Type: <em>boolean</em>; default: <em>false</em>.</li>
+        <li><code>mapDragOn</code>: Enables dragging and panning of just the map. Useful for placement of the map through an interface.  <br> Type: <em>boolean</em>; default: <em>false</em>.</li>
+        <li><code>legendDragOn</code>: Enables dragging and panning of just the legend. Useful for placement of the legend through an interface.  <br> Type: <em>boolean</em>; default: <em>false</em>.</li>
         
         <li>There are a number of style configuration options that will be set on SVG objects.  It is suggested to use CSS for these sorts of thing, but there are use-cases for direct setting of the styles.  The following are the available styles: <ul>
           <li><code>styles</code>: Styles for each map feature.  The fill will be overrided if color is on.</li>
@@ -258,7 +260,7 @@
             colorReverse: true,
             projection: 'azimuthalEqualArea',
             rotation: [0, 0, -20],
-            dragOn: true,
+            canvasDragOn: true,
             tooltipContent: function(d) {
               var p = d.properties;
               return '<h5>' + p.country + '</h5>' +
