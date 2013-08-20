@@ -282,6 +282,9 @@
             legendOn: false
           });
           
+          // Basic test to ensure that a blank config will be ok
+          var mapBlank = SimpleMapD3({ });
+          
           // Sample event
           europePopMap.events.on('dataLoaded.TEST', function() {
             //console.log(arguments, this);
