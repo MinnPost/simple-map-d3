@@ -21,8 +21,8 @@
     "files": "tests/*.js",
     "browsers": {
       "ie": [ 7, 8, 9, 10 ],
-      "firefox": [ 3, 13, 19, 20, 22, "nightly" ],
-      "chrome": [ 20, 25, "canary" ],
+      "firefox": [ 3.5, 10, 15, 17, 18, "nightly" ],
+      "chrome": [ 10, 22, 25, "canary" ],
       "safari": [ 5.1 ],
       "opera": [ 11, 12, "next" ],
       "iphone": [ 6 ]
