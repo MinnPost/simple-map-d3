@@ -5,10 +5,9 @@
   "ignore": [
     "node_modules",
     "bower_components",
-    "test",
-    "css",
-    "js",
-    "tests"
+    "example-data",
+    "tests",
+    "index.html"
   ],
   "dependencies": {
     "d3": "git://github.com/mbostock/d3.git#~3.2.8"
