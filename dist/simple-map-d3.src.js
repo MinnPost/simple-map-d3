@@ -1,7 +1,14 @@
-/*! simple-map-d3 - v0.1.4 - 2013-08-18
+/*! simple-map-d3 - v0.1.5 - 2013-08-21
  * http://code.minnpost.com/simple-map-d3/
  * Copyright (c) 2013 Alan Palazzolo; Licensed MIT
  */
+
+/**
+ * Check for require and D3
+ */
+if (typeof require === 'function') {
+  var d3 = require('d3');
+}
 
 /**
  * Main JS for Simple Map (D3).
@@ -12,6 +19,8 @@ function SimpleMapD3(o) {
   var smd = {};
   
   var defaults = {
+    startManually: false,
+    mapOffset: [0, 0],
     colorOn: false,
     colorSet: 'YlOrBr',
     colorScale: 'quantile',
@@ -30,13 +39,20 @@ function SimpleMapD3(o) {
     legendFormatter: d3.format(','),
     legendOn: true,
     legendTitle: 'Legend',
+    legendOffset: [10, 10],
     styles: {},
     stylesHover: {},
+    stylesBackground: {},
     stylesLegendContainer: {},
     stylesLegendTitleText: {},
     stylesLegendText: {},
     stylesLegendSwatch: {},
-    dragOn: false
+    stylesGraticule: {},
+    stylesGlobe: {},
+    canvasDragOn: false,
+    mapDragOn: false,
+    legendDragOn: false,
+    graticuleOn: false
   };
   
   // Colorbrewer colors borrowed from Chroma.js
@@ -102,10 +118,10 @@ function SimpleMapD3(o) {
     
     // Make colorset
     if (typeof smd.options.colorSet == 'string' && 
-      toString.call(smd.brewer[smd.options.colorSet]) == '[object Array]') {
+      Object.prototype.toString.call(smd.brewer[smd.options.colorSet]) == '[object Array]') {
       smd.options.colorSet = smd.brewer[smd.options.colorSet];
     }
-    else if (toString.call(smd.options.colorSet) != '[object Array]') {
+    else if (Object.prototype.toString.call(smd.options.colorSet) != '[object Array]') {
       throw new Error('Simple Map requires a valid colorSet option.');
     }
     if (smd.options.colorReverse === true) {
@@ -114,13 +130,22 @@ function SimpleMapD3(o) {
     
     // Create event dispatcher using D3
     smd.events = d3.dispatch('dataLoaded', 'rendered');
-
+    
+    // Start manually or automatically
+    if (smd.options.startManually !== true) {
+      smd.start();
+    }
+    return smd;
+  };
+  
+  // Start function
+  smd.start = function() {
     // Check if data was given, or if data source was given
     if (smd.options.data === Object(smd.options.data)) {
       smd.data = smd.options.data;
       smd.loadData(smd.data);
     }
-    else if (toString.call(smd.options.datasource) == '[object String]') {
+    else if (Object.prototype.toString.call(smd.options.datasource) == '[object String]') {
       smd.getData();
     }
     
@@ -143,11 +168,22 @@ function SimpleMapD3(o) {
       smd.data = data;
     }
     
+    smd.topo();
+    
     // Call data loaded event
     smd.events.dataLoaded(smd);
     
     // Render everything
-    smd.topo().canvas().projection().render().fit().legend().drag();
+    smd
+      .drawCanvas()
+      .projection()
+      .makeColorRange()
+      .drawGlobe()
+      .drawGraticule()
+      .drawMap()
+      .fit()
+      .drawLegend()
+      .drag();
     
     // Call rendered event
     smd.events.rendered(smd);
@@ -157,15 +193,18 @@ function SimpleMapD3(o) {
   
   // Handle topojson
   smd.topo = function() {
-    var o, obj;
+    var o = smd.options.topojsonObject;
+    var obj;
     
     if (smd.data.type.toLowerCase() === 'topology' && 
       typeof topojson != 'undefined') {
-      // Use first object found (this should become configurable
-      for (o in smd.data.objects) {
-        if (smd.data.objects.hasOwnProperty(o)) {
-          obj = smd.data.objects[o];
-          break;
+      // Use first object found if object not defined
+      if (typeof o == 'undefined') {
+        for (o in smd.data.objects) {
+          if (smd.data.objects.hasOwnProperty(o)) {
+            obj = smd.data.objects[o];
+            break;
+          }
         }
       }
       smd.data = topojson.feature(smd.data, smd.data.objects[o]);
@@ -175,7 +214,9 @@ function SimpleMapD3(o) {
   };
   
   // Load up canvas, set size to container
-  smd.canvas = function() {
+  smd.drawCanvas = function() {
+    var mapOffset = smd.options.mapOffset;
+  
     smd.container = d3.select(smd.options.container);
     smd.width = parseFloat(smd.container.style('width'));
     smd.height = parseFloat(smd.container.style('height'));
@@ -183,13 +224,23 @@ function SimpleMapD3(o) {
       .attr('width', smd.width)
       .attr('height', smd.height)
       .attr('class', 'smd-canvas')
-      .classed('smd-draggable', smd.options.dragOn)
+      .classed('smd-draggable', smd.options.canvasDragOn)
       .classed('smd-tooltipped', smd.options.tooltipOn)
       .data([{ x: 0, y: 0 }]);
       
-    smd.draggableGroup = smd.canvas.append('g')
-      .attr('class', 'smd-draggable-group');
-    smd.featureGroup = smd.draggableGroup.append('g').attr('class', 'smd-feature-group');
+    smd.background = smd.canvas.append('rect')
+      .attr('width', smd.width)
+      .attr('height', smd.height)
+      .classed('smd-background', true)
+      .style(smd.options.stylesBackground);
+      
+    smd.draggableMapGroup = smd.canvas.append('g')
+      .attr('class', 'smd-draggable-map-group')
+      .data([{ x: mapOffset[0] - 1, y: mapOffset[1] - 1 }])
+      .attr('transform', 'translate(' + mapOffset + ')');
+      
+    smd.featureGroup = smd.draggableMapGroup.append('g')
+      .attr('class', 'smd-feature-group');
       
     // Add tooltip
     if (smd.options.tooltipOn === true) {
@@ -247,38 +298,42 @@ function SimpleMapD3(o) {
   // Make color range
   smd.makeColorRange = function() {
     var scaleFunc = smd.options.colorScale;
-    var values = [];
-    var d;
+    var d, domain;
+    smd.valuesSet = [];
+    
+    // Make color range
+    if (smd.options.colorOn !== true) {
+      return smd;
+    }
     
     // Get values for range
     for (d = 0; d < smd.data.features.length; d++) {
-      values.push(smd.data.features[d].properties[smd.options.colorProperty]);
+      smd.valuesSet.push(parseFloat(smd.data.features[d].properties[smd.options.colorProperty]));
     }
+    smd.valuesSet.sort(function(a, b) { return a - b; });
   
     // Determine range function to use
     if (typeof scaleFunc != 'function') {
       scaleFunc = d3.scale[scaleFunc];
-    }
-    
+    } 
     // Make range with appropriate values
     smd.colorRange = scaleFunc()
-      .domain(values)
+      .domain(smd.valuesSet)
       .range(smd.options.colorSet);
     
     // Clamp if can
     if (typeof smd.colorRange.clamp == 'function') {
       smd.colorRange.clamp(true);
     }
-    
     return smd;
   };
   
   // Dragging functinoality
   smd.dragging = false;
   smd.drag = function() {
-    smd.dragIt = d3.behavior.drag()
+    smd.dragCanvas = d3.behavior.drag()
       .on('drag', function(d) {
-        if (smd.options.dragOn !== true) {
+        if (smd.options.canvasDragOn !== true) {
           return true;
         }
         smd.dragging = true;
@@ -287,35 +342,115 @@ function SimpleMapD3(o) {
         d.x += d3.event.dx;
         d.y += d3.event.dy;
         
-        smd.draggableGroup.attr('transform', 'translate(' + [d.x, d.y] + ')');
+        smd.draggableMapGroup.attr('transform', 'translate(' + [d.x, d.y] + ')');
       })
       .on('dragend', function() {
         smd.canvas.classed('dragging', false);
         smd.dragging = false;
       });
+    
+    // Simple drag
+    smd.dragSimple = d3.behavior.drag()
+      .on('drag', function(d,i) {
+        d.x += d3.event.dx;
+        d.y += d3.event.dy;
+        d3.select(this)
+          .classed('dragging', true)
+          .attr('transform', function(d, i) {
+            return 'translate(' + [ d.x, d.y ] + ')';
+          });
+      })
+      .on('dragend', function(d) {
+        d3.select(this).classed('dragging', false);
+      });
+    
+    // Whole canvas drag
+    if (smd.options.canvasDragOn === true) {
+      smd.canvas.call(smd.dragCanvas);
+    }
 
-    smd.canvas.call(smd.dragIt);
+    // Jus map drag
+    if (smd.options.mapDragOn === true) {
+      smd.draggableMapGroup
+        .classed('smd-draggable', true)
+        .call(smd.dragSimple);
+    }
+
+    // Legend drag
+    if (smd.options.legendDragOn === true && smd.legendGroup) {
+      smd.legendGroup
+        .classed('smd-draggable', true)
+        .call(smd.dragSimple);
+    }
+    
     return smd;
-  };  
+  };
+  
+  // Render graticule
+  smd.drawGraticule = function() {
+    if (smd.options.graticuleOn !== true) {
+      return smd;
+    }
+    
+    smd.graticule = d3.geo.graticule();
+    smd.featureGroup.append('path')
+      .datum(smd.graticule)
+      .attr('d', smd.projPath)
+      .attr('class', 'smd-graticule')
+      .style(smd.options.stylesGraticule);
+    
+    return smd;
+  };
+  
+  // Render globe
+  smd.drawGlobe = function() {
+    if (smd.options.globeOn !== true) {
+      return smd;
+    }
+    
+    smd.globe = smd.featureGroup.append('path')
+      .datum({ type: 'Sphere' })
+      .attr('class', 'smd-globe')
+      .attr('d', smd.projPath)
+      .style(smd.options.stylesGlobe);
+    
+    return smd;
+  };
   
   // Make legend
-  smd.legend = function() {
+  smd.drawLegend = function() {
     var qs;
     var formatter = smd.options.legendFormatter || d3.format(',');
-    var legendSwatches;
     var unit = 10;
     var width = smd.options.legendWidth || (smd.width / 5);
     var scale = smd.options.legendScale || 1;
+    var min = d3.min(smd.valuesSet);
+    var max = d3.max(smd.valuesSet);
+    var offset = smd.options.legendOffset;
+    var legendSwatches = [];
+    var c;
     
     // Make sure legend is on
-    if (smd.options.legendOn !== true) {
+    if (smd.options.legendOn !== true || typeof smd.colorRange == 'undefined') {
       return smd;
     }
     
     // Specific to scale type, unfortunately
-    if (smd.options.colorScale === 'quantile' &&
-      typeof smd.colorRange != 'undefined') {
+    if (smd.options.colorScale === 'quantile') {
       legendSwatches = smd.colorRange.quantiles();
+      legendSwatches[0] = min;
+    }
+    
+    // Quantize
+    if (smd.options.colorScale === 'quantize') {
+      for (c = 0; c < smd.options.colorSet.length; c++) {
+        legendSwatches.push(smd.colorRange.invertExtent(smd.options.colorSet[c])[0]);
+      }
+    }
+    
+    // Ensure we have something to make a legend with
+    if (legendSwatches.length === 0) {
+      return smd;
     }
     
     // Specific to scale type, unfortunately
@@ -328,14 +463,14 @@ function SimpleMapD3(o) {
         .attr('class', 'smd-legend-container')
         .attr('width', width)
         .attr('height', legendSwatches.length * (unit * 2) + (unit * 3))
-        .attr('x', unit)
-        .attr('y', unit)
+        .attr('x', 0)
+        .attr('y', 0)
         .style(smd.options.stylesLegendContainer);
       smd.legendGroup.append('text')
         .attr('class', 'smd-legend-label')
         .attr('font-size', unit)
-        .attr('x', (unit * 2))
-        .attr('y', (unit * 3))
+        .attr('x', (unit * 1))
+        .attr('y', (unit * 2))
         .text(smd.options.legendTitle)
         .style(smd.options.stylesLegendTitleText);
       
@@ -347,8 +482,8 @@ function SimpleMapD3(o) {
           .attr('class', 'smd-legend-swatch')
           .attr('width', unit)
           .attr('height', unit)
-          .attr('x', (unit * 2))
-          .attr('y', function(d, i) { return (i * unit * 2) + (unit * 4); })
+          .attr('x', (unit * 1))
+          .attr('y', function(d, i) { return (i * unit * 2) + (unit * 3); })
           .style(smd.options.stylesLegendSwatch)
           .style('fill', function(d, i) { return smd.colorRange(d); });
           
@@ -359,25 +494,23 @@ function SimpleMapD3(o) {
         .enter().append('text')
           .attr('class', 'smd-legend-amount')
           .attr('font-size', unit)
-          .attr('x', (unit * 4))
-          .attr('y', function(d, i) { return (i * unit * 2) + (unit * 5 - 1); })
+          .attr('x', (unit * 3))
+          .attr('y', function(d, i) { return (i * unit * 2) + (unit * 4 - 1); })
           .text(function(d, i) { return '>= ' + formatter(d); })
           .style(smd.options.stylesLegendText);
       
-      // Scale
-      smd.legendGroup.attr('transform', 'scale(' + scale + ')');
+      // Scale and translate from offset
+      smd.legendGroup
+        .attr('transform', 'scale(' + scale + ')')
+        .data([{ x: offset[0] - 1, y: offset[1] - 1 }])
+        .attr('transform', 'translate(' + offset + ')');
     }
   
     return smd;
   };
   
   // Render
-  smd.render = function() {
-    // Make color range
-    if (smd.options.colorOn === true) {
-      smd.makeColorRange();
-    }
-  
+  smd.drawMap = function() {
     // Render paths
     smd.featureGroup
       .selectAll('path')
@@ -388,7 +521,7 @@ function SimpleMapD3(o) {
         .style(smd.options.styles)
         .attr('fill', function(d) {
           if (smd.options.colorOn === false) {
-            return smd.options.fill;
+            return smd.options.styles.fill;
           }
           else {
             return smd.colorRange(d.properties[smd.options.colorProperty]);
@@ -422,4 +555,9 @@ function SimpleMapD3(o) {
   // Construct and return our map object.
   smd.constructor(o);
   return smd;
+}
+
+// NodeJS support
+if (typeof module !== 'undefined') {
+  module.exports = SimpleMapD3;
 }

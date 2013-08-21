@@ -1,4 +1,4 @@
-/*! simple-map-d3 - v0.1.4 - 2013-08-18
+/*! simple-map-d3 - v0.1.5 - 2013-08-21
  * http://code.minnpost.com/simple-map-d3/
  * Copyright (c) 2013 Alan Palazzolo; Licensed MIT
  */
@@ -22,15 +22,23 @@
   background-color: rgba(255, 255, 255, 0.9);
 }
 
-.smd-canvas.smd-draggable { 
+.smd-canvas.smd-draggable,
+.smd-draggable { 
   cursor: grab;
   cursor: -moz-grab;
   cursor: -webkit-grab;
 }
-.smd-canvas.smd-draggable.dragging {
+
+.smd-canvas.smd-draggable.dragging,
+.smd-draggable.dragging {
   cursor: grabbing;
   cursor: -moz-grabbing;
   cursor: -webkit-grabbing;
+}
+
+.smd-background {
+  fill: transparent;
+  stroke: 0;
 }
 
 .smd-path {
@@ -57,4 +65,17 @@
 
 .smd-legend-label {
   font-weight: bold;
+}
+
+.smd-graticule {
+  fill: none;
+  stroke: #222222;
+  stroke-width: .5px;
+  stroke-opacity: .75;
+}
+
+.smd-globe {
+  fill: none;
+  stroke: #222222;
+  stroke-width: 3px;
 }
