@@ -1,7 +1,7 @@
 {
   "name": "simple-map-d3",
   "version": "0.1.5",
-  "main": "dist/simple-map-d3.min.js",
+  "main": "dist/simple-map-d3.js",
   "ignore": [
     "node_modules",
     "bower_components",
